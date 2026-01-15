@@ -1,69 +1,75 @@
 import Link from "next/link";
-
-import { LatestPost } from "@/app/_components/post";
+import { redirect } from "next/navigation";
 import { auth } from "@/server/auth";
-import { api, HydrateClient } from "@/trpc/server";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
   const session = await auth();
 
+  // If user is logged in, redirect to dashboard
   if (session?.user) {
-    void api.post.getLatest.prefetch();
+    redirect("/dashboard");
   }
 
   return (
-    <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
+    <main className="flex min-h-screen flex-col items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100">
+      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
+        <div className="text-center">
+          <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl">
+            Assistenza Domiciliare
           </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello ? hello.greeting : "Loading tRPC query..."}
-            </p>
-
-            <div className="flex flex-col items-center justify-center gap-4">
-              <p className="text-center text-2xl text-white">
-                {session && <span>Logged in as {session.user?.name}</span>}
-              </p>
-              <Link
-                href={session ? "/api/auth/signout" : "/api/auth/signin"}
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-              >
-                {session ? "Sign out" : "Sign in"}
-              </Link>
-            </div>
-          </div>
-
-          {session?.user && <LatestPost />}
+          <p className="mt-6 text-lg leading-8 text-gray-600">
+            Sistema di gestione per infermieri professionisti
+          </p>
+          <p className="mt-2 text-base text-gray-500">
+            Gestisci pazienti, appuntamenti e calendario in modo semplice ed efficace
+          </p>
         </div>
-      </main>
-    </HydrateClient>
+
+        <div className="flex gap-4">
+          <Link
+            href="/auth/signin"
+            className="rounded-lg bg-indigo-600 px-8 py-3 text-lg font-semibold text-white shadow-md hover:bg-indigo-700"
+          >
+            Accedi
+          </Link>
+          <Link
+            href="/auth/register"
+            className="rounded-lg border-2 border-indigo-600 px-8 py-3 text-lg font-semibold text-indigo-600 hover:bg-indigo-50"
+          >
+            Registrati
+          </Link>
+        </div>
+
+        <div className="mt-8 grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="rounded-lg bg-white p-6 shadow-md">
+            <div className="mb-3 text-3xl">👥</div>
+            <h3 className="text-xl font-bold text-gray-900">
+              Gestione Pazienti
+            </h3>
+            <p className="mt-2 text-gray-600">
+              Anagrafica completa con tutti i dati necessari
+            </p>
+          </div>
+          <div className="rounded-lg bg-white p-6 shadow-md">
+            <div className="mb-3 text-3xl">📅</div>
+            <h3 className="text-xl font-bold text-gray-900">
+              Calendario
+            </h3>
+            <p className="mt-2 text-gray-600">
+              Pianifica e visualizza tutti gli appuntamenti
+            </p>
+          </div>
+          <div className="rounded-lg bg-white p-6 shadow-md">
+            <div className="mb-3 text-3xl">👨‍⚕️</div>
+            <h3 className="text-xl font-bold text-gray-900">
+              Collaborazione
+            </h3>
+            <p className="mt-2 text-gray-600">
+              Lavora in team con tracciamento modifiche
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }

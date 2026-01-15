@@ -49,7 +49,7 @@ export const authConfig = {
           where: { username: credentials.username as string }
         });
 
-        if (!user || !user.password) {
+        if (!user?.password) {
           return null;
         }
 
@@ -72,7 +72,6 @@ export const authConfig = {
       }
     })
   ],
-  adapter: PrismaAdapter(db),
   session: {
     strategy: "jwt",
   },
