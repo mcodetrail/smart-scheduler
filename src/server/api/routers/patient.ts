@@ -21,6 +21,9 @@ export const patientRouter = createTRPCRouter({
         phone2: z.string().max(50).optional(),
         assistanceType: z.nativeEnum(AssistanceType).optional(),
         exemptionCode: z.string().max(10),
+        nextVisitDate: z.date().optional(),
+        visitFrequency: z.number().int().positive().optional(),
+        assignedToId: z.string().optional(),
         notes: z.string().optional(),
       })
     )
@@ -40,6 +43,9 @@ export const patientRouter = createTRPCRouter({
         data: {
           ...input,
           createdById: ctx.session.user.id,
+          assignedToId: input.assignedToId || ctx.session.user.id,
+          lastAssignedById: ctx.session.user.id,
+          lastAssignedAt: new Date(),
         },
       });
 
@@ -65,11 +71,14 @@ export const patientRouter = createTRPCRouter({
         phone2: z.string().max(50).optional(),
         assistanceType: z.nativeEnum(AssistanceType).optional(),
         exemptionCode: z.string().max(10),
+        nextVisitDate: z.date().optional(),
+        visitFrequency: z.number().int().positive().optional(),
+        assignedToId: z.string().optional(),
         notes: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
+      const { id, assignedToId, ...data } = input;
 
       // Check if fiscal code already exists for another patient
       if (data.fiscalCode) {
@@ -85,9 +94,23 @@ export const patientRouter = createTRPCRouter({
         }
       }
 
+      // Check if assignedToId changed
+      const currentPatient = await ctx.db.patient.findUnique({
+        where: { id },
+        select: { assignedToId: true },
+      });
+
+      const updateData: any = { ...data };
+      
+      if (assignedToId !== undefined && assignedToId !== currentPatient?.assignedToId) {
+        updateData.assignedToId = assignedToId;
+        updateData.lastAssignedById = ctx.session.user.id;
+        updateData.lastAssignedAt = new Date();
+      }
+
       const patient = await ctx.db.patient.update({
         where: { id },
-        data,
+        data: updateData,
       });
 
       return patient;
@@ -233,6 +256,54 @@ export const patientRouter = createTRPCRouter({
           fiscalCode: true,
           dateOfBirth: true,
           phone1: true,
+        },
+      });
+
+      return patients;
+    }),
+
+  /**
+   * Get patients by visit date range
+   */
+  getByVisitDate: protectedProcedure
+    .input(
+      z.object({
+        startDate: z.date(),
+        endDate: z.date(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const patients = await ctx.db.patient.findMany({
+        where: {
+          nextVisitDate: {
+            gte: input.startDate,
+            lte: input.endDate,
+          },
+        },
+        orderBy: [{ nextVisitDate: "asc" }, { lastName: "asc" }],
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          address: true,
+          phone1: true,
+          notes: true,
+          nextVisitDate: true,
+          visitFrequency: true,
+          assignedTo: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+            },
+          },
+          lastAssignedBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          lastAssignedAt: true,
         },
       });
 

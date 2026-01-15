@@ -1432,6 +1432,8 @@ export namespace Prisma {
     sessions: number
     posts: number
     createdPatients: number
+    assignedPatients: number
+    lastAssignedPatients: number
     createdAppointments: number
     lastModifiedAppointments: number
   }
@@ -1441,6 +1443,8 @@ export namespace Prisma {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     posts?: boolean | UserCountOutputTypeCountPostsArgs
     createdPatients?: boolean | UserCountOutputTypeCountCreatedPatientsArgs
+    assignedPatients?: boolean | UserCountOutputTypeCountAssignedPatientsArgs
+    lastAssignedPatients?: boolean | UserCountOutputTypeCountLastAssignedPatientsArgs
     createdAppointments?: boolean | UserCountOutputTypeCountCreatedAppointmentsArgs
     lastModifiedAppointments?: boolean | UserCountOutputTypeCountLastModifiedAppointmentsArgs
   }
@@ -1481,6 +1485,20 @@ export namespace Prisma {
    * UserCountOutputType without action
    */
   export type UserCountOutputTypeCountCreatedPatientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssignedPatientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PatientWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLastAssignedPatientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PatientWhereInput
   }
 
@@ -5073,6 +5091,8 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
     createdPatients?: boolean | User$createdPatientsArgs<ExtArgs>
+    assignedPatients?: boolean | User$assignedPatientsArgs<ExtArgs>
+    lastAssignedPatients?: boolean | User$lastAssignedPatientsArgs<ExtArgs>
     createdAppointments?: boolean | User$createdAppointmentsArgs<ExtArgs>
     lastModifiedAppointments?: boolean | User$lastModifiedAppointmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -5123,6 +5143,8 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
     createdPatients?: boolean | User$createdPatientsArgs<ExtArgs>
+    assignedPatients?: boolean | User$assignedPatientsArgs<ExtArgs>
+    lastAssignedPatients?: boolean | User$lastAssignedPatientsArgs<ExtArgs>
     createdAppointments?: boolean | User$createdAppointmentsArgs<ExtArgs>
     lastModifiedAppointments?: boolean | User$lastModifiedAppointmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -5137,6 +5159,8 @@ export namespace Prisma {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
       createdPatients: Prisma.$PatientPayload<ExtArgs>[]
+      assignedPatients: Prisma.$PatientPayload<ExtArgs>[]
+      lastAssignedPatients: Prisma.$PatientPayload<ExtArgs>[]
       createdAppointments: Prisma.$AppointmentPayload<ExtArgs>[]
       lastModifiedAppointments: Prisma.$AppointmentPayload<ExtArgs>[]
     }
@@ -5549,6 +5573,8 @@ export namespace Prisma {
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdPatients<T extends User$createdPatientsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdPatientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedPatients<T extends User$assignedPatientsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedPatientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    lastAssignedPatients<T extends User$lastAssignedPatientsArgs<ExtArgs> = {}>(args?: Subset<T, User$lastAssignedPatientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdAppointments<T extends User$createdAppointmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdAppointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lastModifiedAppointments<T extends User$lastModifiedAppointmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$lastModifiedAppointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -6072,6 +6098,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.assignedPatients
+   */
+  export type User$assignedPatientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Patient
+     */
+    select?: PatientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Patient
+     */
+    omit?: PatientOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientInclude<ExtArgs> | null
+    where?: PatientWhereInput
+    orderBy?: PatientOrderByWithRelationInput | PatientOrderByWithRelationInput[]
+    cursor?: PatientWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PatientScalarFieldEnum | PatientScalarFieldEnum[]
+  }
+
+  /**
+   * User.lastAssignedPatients
+   */
+  export type User$lastAssignedPatientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Patient
+     */
+    select?: PatientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Patient
+     */
+    omit?: PatientOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PatientInclude<ExtArgs> | null
+    where?: PatientWhereInput
+    orderBy?: PatientOrderByWithRelationInput | PatientOrderByWithRelationInput[]
+    cursor?: PatientWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PatientScalarFieldEnum | PatientScalarFieldEnum[]
+  }
+
+  /**
    * User.createdAppointments
    */
   export type User$createdAppointmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6144,8 +6218,18 @@ export namespace Prisma {
 
   export type AggregatePatient = {
     _count: PatientCountAggregateOutputType | null
+    _avg: PatientAvgAggregateOutputType | null
+    _sum: PatientSumAggregateOutputType | null
     _min: PatientMinAggregateOutputType | null
     _max: PatientMaxAggregateOutputType | null
+  }
+
+  export type PatientAvgAggregateOutputType = {
+    visitFrequency: number | null
+  }
+
+  export type PatientSumAggregateOutputType = {
+    visitFrequency: number | null
   }
 
   export type PatientMinAggregateOutputType = {
@@ -6162,10 +6246,15 @@ export namespace Prisma {
     phone2: string | null
     assistanceType: $Enums.AssistanceType | null
     exemptionCode: string | null
+    nextVisitDate: Date | null
+    visitFrequency: number | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
     createdById: string | null
+    assignedToId: string | null
+    lastAssignedById: string | null
+    lastAssignedAt: Date | null
   }
 
   export type PatientMaxAggregateOutputType = {
@@ -6182,10 +6271,15 @@ export namespace Prisma {
     phone2: string | null
     assistanceType: $Enums.AssistanceType | null
     exemptionCode: string | null
+    nextVisitDate: Date | null
+    visitFrequency: number | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
     createdById: string | null
+    assignedToId: string | null
+    lastAssignedById: string | null
+    lastAssignedAt: Date | null
   }
 
   export type PatientCountAggregateOutputType = {
@@ -6202,13 +6296,26 @@ export namespace Prisma {
     phone2: number
     assistanceType: number
     exemptionCode: number
+    nextVisitDate: number
+    visitFrequency: number
     notes: number
     createdAt: number
     updatedAt: number
     createdById: number
+    assignedToId: number
+    lastAssignedById: number
+    lastAssignedAt: number
     _all: number
   }
 
+
+  export type PatientAvgAggregateInputType = {
+    visitFrequency?: true
+  }
+
+  export type PatientSumAggregateInputType = {
+    visitFrequency?: true
+  }
 
   export type PatientMinAggregateInputType = {
     id?: true
@@ -6224,10 +6331,15 @@ export namespace Prisma {
     phone2?: true
     assistanceType?: true
     exemptionCode?: true
+    nextVisitDate?: true
+    visitFrequency?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
     createdById?: true
+    assignedToId?: true
+    lastAssignedById?: true
+    lastAssignedAt?: true
   }
 
   export type PatientMaxAggregateInputType = {
@@ -6244,10 +6356,15 @@ export namespace Prisma {
     phone2?: true
     assistanceType?: true
     exemptionCode?: true
+    nextVisitDate?: true
+    visitFrequency?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
     createdById?: true
+    assignedToId?: true
+    lastAssignedById?: true
+    lastAssignedAt?: true
   }
 
   export type PatientCountAggregateInputType = {
@@ -6264,10 +6381,15 @@ export namespace Prisma {
     phone2?: true
     assistanceType?: true
     exemptionCode?: true
+    nextVisitDate?: true
+    visitFrequency?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
     createdById?: true
+    assignedToId?: true
+    lastAssignedById?: true
+    lastAssignedAt?: true
     _all?: true
   }
 
@@ -6309,6 +6431,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PatientAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PatientSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PatientMinAggregateInputType
@@ -6339,6 +6473,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PatientCountAggregateInputType | true
+    _avg?: PatientAvgAggregateInputType
+    _sum?: PatientSumAggregateInputType
     _min?: PatientMinAggregateInputType
     _max?: PatientMaxAggregateInputType
   }
@@ -6357,11 +6493,18 @@ export namespace Prisma {
     phone2: string | null
     assistanceType: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate: Date | null
+    visitFrequency: number | null
     notes: string | null
     createdAt: Date
     updatedAt: Date
     createdById: string
+    assignedToId: string | null
+    lastAssignedById: string | null
+    lastAssignedAt: Date | null
     _count: PatientCountAggregateOutputType | null
+    _avg: PatientAvgAggregateOutputType | null
+    _sum: PatientSumAggregateOutputType | null
     _min: PatientMinAggregateOutputType | null
     _max: PatientMaxAggregateOutputType | null
   }
@@ -6394,11 +6537,18 @@ export namespace Prisma {
     phone2?: boolean
     assistanceType?: boolean
     exemptionCode?: boolean
+    nextVisitDate?: boolean
+    visitFrequency?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdById?: boolean
+    assignedToId?: boolean
+    lastAssignedById?: boolean
+    lastAssignedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | Patient$assignedToArgs<ExtArgs>
+    lastAssignedBy?: boolean | Patient$lastAssignedByArgs<ExtArgs>
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["patient"]>
@@ -6417,11 +6567,18 @@ export namespace Prisma {
     phone2?: boolean
     assistanceType?: boolean
     exemptionCode?: boolean
+    nextVisitDate?: boolean
+    visitFrequency?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdById?: boolean
+    assignedToId?: boolean
+    lastAssignedById?: boolean
+    lastAssignedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | Patient$assignedToArgs<ExtArgs>
+    lastAssignedBy?: boolean | Patient$lastAssignedByArgs<ExtArgs>
   }, ExtArgs["result"]["patient"]>
 
   export type PatientSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6438,11 +6595,18 @@ export namespace Prisma {
     phone2?: boolean
     assistanceType?: boolean
     exemptionCode?: boolean
+    nextVisitDate?: boolean
+    visitFrequency?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdById?: boolean
+    assignedToId?: boolean
+    lastAssignedById?: boolean
+    lastAssignedAt?: boolean
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | Patient$assignedToArgs<ExtArgs>
+    lastAssignedBy?: boolean | Patient$lastAssignedByArgs<ExtArgs>
   }, ExtArgs["result"]["patient"]>
 
   export type PatientSelectScalar = {
@@ -6459,29 +6623,42 @@ export namespace Prisma {
     phone2?: boolean
     assistanceType?: boolean
     exemptionCode?: boolean
+    nextVisitDate?: boolean
+    visitFrequency?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdById?: boolean
+    assignedToId?: boolean
+    lastAssignedById?: boolean
+    lastAssignedAt?: boolean
   }
 
-  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "fiscalCode" | "address" | "houseNumber" | "city" | "postalCode" | "phone1" | "phone2" | "assistanceType" | "exemptionCode" | "notes" | "createdAt" | "updatedAt" | "createdById", ExtArgs["result"]["patient"]>
+  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "fiscalCode" | "address" | "houseNumber" | "city" | "postalCode" | "phone1" | "phone2" | "assistanceType" | "exemptionCode" | "nextVisitDate" | "visitFrequency" | "notes" | "createdAt" | "updatedAt" | "createdById" | "assignedToId" | "lastAssignedById" | "lastAssignedAt", ExtArgs["result"]["patient"]>
   export type PatientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | Patient$assignedToArgs<ExtArgs>
+    lastAssignedBy?: boolean | Patient$lastAssignedByArgs<ExtArgs>
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
     _count?: boolean | PatientCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PatientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | Patient$assignedToArgs<ExtArgs>
+    lastAssignedBy?: boolean | Patient$lastAssignedByArgs<ExtArgs>
   }
   export type PatientIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | Patient$assignedToArgs<ExtArgs>
+    lastAssignedBy?: boolean | Patient$lastAssignedByArgs<ExtArgs>
   }
 
   export type $PatientPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Patient"
     objects: {
       createdBy: Prisma.$UserPayload<ExtArgs>
+      assignedTo: Prisma.$UserPayload<ExtArgs> | null
+      lastAssignedBy: Prisma.$UserPayload<ExtArgs> | null
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6498,10 +6675,15 @@ export namespace Prisma {
       phone2: string | null
       assistanceType: $Enums.AssistanceType | null
       exemptionCode: string
+      nextVisitDate: Date | null
+      visitFrequency: number | null
       notes: string | null
       createdAt: Date
       updatedAt: Date
       createdById: string
+      assignedToId: string | null
+      lastAssignedById: string | null
+      lastAssignedAt: Date | null
     }, ExtArgs["result"]["patient"]>
     composites: {}
   }
@@ -6897,6 +7079,8 @@ export namespace Prisma {
   export interface Prisma__PatientClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    assignedTo<T extends Patient$assignedToArgs<ExtArgs> = {}>(args?: Subset<T, Patient$assignedToArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    lastAssignedBy<T extends Patient$lastAssignedByArgs<ExtArgs> = {}>(args?: Subset<T, Patient$lastAssignedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     appointments<T extends Patient$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Patient$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6940,10 +7124,15 @@ export namespace Prisma {
     readonly phone2: FieldRef<"Patient", 'String'>
     readonly assistanceType: FieldRef<"Patient", 'AssistanceType'>
     readonly exemptionCode: FieldRef<"Patient", 'String'>
+    readonly nextVisitDate: FieldRef<"Patient", 'DateTime'>
+    readonly visitFrequency: FieldRef<"Patient", 'Int'>
     readonly notes: FieldRef<"Patient", 'String'>
     readonly createdAt: FieldRef<"Patient", 'DateTime'>
     readonly updatedAt: FieldRef<"Patient", 'DateTime'>
     readonly createdById: FieldRef<"Patient", 'String'>
+    readonly assignedToId: FieldRef<"Patient", 'String'>
+    readonly lastAssignedById: FieldRef<"Patient", 'String'>
+    readonly lastAssignedAt: FieldRef<"Patient", 'DateTime'>
   }
     
 
@@ -7335,6 +7524,44 @@ export namespace Prisma {
      * Limit how many Patients to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Patient.assignedTo
+   */
+  export type Patient$assignedToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Patient.lastAssignedBy
+   */
+  export type Patient$lastAssignedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -9599,10 +9826,15 @@ export namespace Prisma {
     phone2: 'phone2',
     assistanceType: 'assistanceType',
     exemptionCode: 'exemptionCode',
+    nextVisitDate: 'nextVisitDate',
+    visitFrequency: 'visitFrequency',
     notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    createdById: 'createdById'
+    createdById: 'createdById',
+    assignedToId: 'assignedToId',
+    lastAssignedById: 'lastAssignedById',
+    lastAssignedAt: 'lastAssignedAt'
   };
 
   export type PatientScalarFieldEnum = (typeof PatientScalarFieldEnum)[keyof typeof PatientScalarFieldEnum]
@@ -9915,6 +10147,8 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
     createdPatients?: PatientListRelationFilter
+    assignedPatients?: PatientListRelationFilter
+    lastAssignedPatients?: PatientListRelationFilter
     createdAppointments?: AppointmentListRelationFilter
     lastModifiedAppointments?: AppointmentListRelationFilter
   }
@@ -9934,6 +10168,8 @@ export namespace Prisma {
     sessions?: SessionOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
     createdPatients?: PatientOrderByRelationAggregateInput
+    assignedPatients?: PatientOrderByRelationAggregateInput
+    lastAssignedPatients?: PatientOrderByRelationAggregateInput
     createdAppointments?: AppointmentOrderByRelationAggregateInput
     lastModifiedAppointments?: AppointmentOrderByRelationAggregateInput
   }
@@ -9956,6 +10192,8 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
     createdPatients?: PatientListRelationFilter
+    assignedPatients?: PatientListRelationFilter
+    lastAssignedPatients?: PatientListRelationFilter
     createdAppointments?: AppointmentListRelationFilter
     lastModifiedAppointments?: AppointmentListRelationFilter
   }, "id" | "username" | "email">
@@ -10009,11 +10247,18 @@ export namespace Prisma {
     phone2?: StringNullableFilter<"Patient"> | string | null
     assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringFilter<"Patient"> | string
+    nextVisitDate?: DateTimeNullableFilter<"Patient"> | Date | string | null
+    visitFrequency?: IntNullableFilter<"Patient"> | number | null
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     createdById?: StringFilter<"Patient"> | string
+    assignedToId?: StringNullableFilter<"Patient"> | string | null
+    lastAssignedById?: StringNullableFilter<"Patient"> | string | null
+    lastAssignedAt?: DateTimeNullableFilter<"Patient"> | Date | string | null
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    lastAssignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     appointments?: AppointmentListRelationFilter
   }
 
@@ -10031,11 +10276,18 @@ export namespace Prisma {
     phone2?: SortOrderInput | SortOrder
     assistanceType?: SortOrderInput | SortOrder
     exemptionCode?: SortOrder
+    nextVisitDate?: SortOrderInput | SortOrder
+    visitFrequency?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdById?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
+    lastAssignedById?: SortOrderInput | SortOrder
+    lastAssignedAt?: SortOrderInput | SortOrder
     createdBy?: UserOrderByWithRelationInput
+    assignedTo?: UserOrderByWithRelationInput
+    lastAssignedBy?: UserOrderByWithRelationInput
     appointments?: AppointmentOrderByRelationAggregateInput
   }
 
@@ -10056,11 +10308,18 @@ export namespace Prisma {
     phone2?: StringNullableFilter<"Patient"> | string | null
     assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringFilter<"Patient"> | string
+    nextVisitDate?: DateTimeNullableFilter<"Patient"> | Date | string | null
+    visitFrequency?: IntNullableFilter<"Patient"> | number | null
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     createdById?: StringFilter<"Patient"> | string
+    assignedToId?: StringNullableFilter<"Patient"> | string | null
+    lastAssignedById?: StringNullableFilter<"Patient"> | string | null
+    lastAssignedAt?: DateTimeNullableFilter<"Patient"> | Date | string | null
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    lastAssignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     appointments?: AppointmentListRelationFilter
   }, "id" | "fiscalCode">
 
@@ -10078,13 +10337,20 @@ export namespace Prisma {
     phone2?: SortOrderInput | SortOrder
     assistanceType?: SortOrderInput | SortOrder
     exemptionCode?: SortOrder
+    nextVisitDate?: SortOrderInput | SortOrder
+    visitFrequency?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdById?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
+    lastAssignedById?: SortOrderInput | SortOrder
+    lastAssignedAt?: SortOrderInput | SortOrder
     _count?: PatientCountOrderByAggregateInput
+    _avg?: PatientAvgOrderByAggregateInput
     _max?: PatientMaxOrderByAggregateInput
     _min?: PatientMinOrderByAggregateInput
+    _sum?: PatientSumOrderByAggregateInput
   }
 
   export type PatientScalarWhereWithAggregatesInput = {
@@ -10104,10 +10370,15 @@ export namespace Prisma {
     phone2?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     assistanceType?: EnumAssistanceTypeNullableWithAggregatesFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringWithAggregatesFilter<"Patient"> | string
+    nextVisitDate?: DateTimeNullableWithAggregatesFilter<"Patient"> | Date | string | null
+    visitFrequency?: IntNullableWithAggregatesFilter<"Patient"> | number | null
     notes?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
     createdById?: StringWithAggregatesFilter<"Patient"> | string
+    assignedToId?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    lastAssignedById?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    lastAssignedAt?: DateTimeNullableWithAggregatesFilter<"Patient"> | Date | string | null
   }
 
   export type AppointmentWhereInput = {
@@ -10467,6 +10738,8 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
   }
@@ -10486,6 +10759,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
   }
@@ -10505,6 +10780,8 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -10524,6 +10801,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -10581,10 +10860,15 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastAssignedAt?: Date | string | null
     createdBy: UserCreateNestedOneWithoutCreatedPatientsInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedPatientsInput
+    lastAssignedBy?: UserCreateNestedOneWithoutLastAssignedPatientsInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
   }
 
@@ -10602,10 +10886,15 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdById: string
+    assignedToId?: string | null
+    lastAssignedById?: string | null
+    lastAssignedAt?: Date | string | null
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
   }
 
@@ -10623,10 +10912,15 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: UserUpdateOneRequiredWithoutCreatedPatientsNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedPatientsNestedInput
+    lastAssignedBy?: UserUpdateOneWithoutLastAssignedPatientsNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
   }
 
@@ -10644,10 +10938,15 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
   }
 
@@ -10665,10 +10964,15 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdById: string
+    assignedToId?: string | null
+    lastAssignedById?: string | null
+    lastAssignedAt?: Date | string | null
   }
 
   export type PatientUpdateManyMutationInput = {
@@ -10685,9 +10989,12 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PatientUncheckedUpdateManyInput = {
@@ -10704,10 +11011,15 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AppointmentCreateInput = {
@@ -11228,6 +11540,11 @@ export namespace Prisma {
     not?: NestedEnumAssistanceTypeNullableFilter<$PrismaModel> | $Enums.AssistanceType | null
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type PatientCountOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
@@ -11242,10 +11559,19 @@ export namespace Prisma {
     phone2?: SortOrder
     assistanceType?: SortOrder
     exemptionCode?: SortOrder
+    nextVisitDate?: SortOrder
+    visitFrequency?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdById?: SortOrder
+    assignedToId?: SortOrder
+    lastAssignedById?: SortOrder
+    lastAssignedAt?: SortOrder
+  }
+
+  export type PatientAvgOrderByAggregateInput = {
+    visitFrequency?: SortOrder
   }
 
   export type PatientMaxOrderByAggregateInput = {
@@ -11262,10 +11588,15 @@ export namespace Prisma {
     phone2?: SortOrder
     assistanceType?: SortOrder
     exemptionCode?: SortOrder
+    nextVisitDate?: SortOrder
+    visitFrequency?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdById?: SortOrder
+    assignedToId?: SortOrder
+    lastAssignedById?: SortOrder
+    lastAssignedAt?: SortOrder
   }
 
   export type PatientMinOrderByAggregateInput = {
@@ -11282,10 +11613,19 @@ export namespace Prisma {
     phone2?: SortOrder
     assistanceType?: SortOrder
     exemptionCode?: SortOrder
+    nextVisitDate?: SortOrder
+    visitFrequency?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdById?: SortOrder
+    assignedToId?: SortOrder
+    lastAssignedById?: SortOrder
+    lastAssignedAt?: SortOrder
+  }
+
+  export type PatientSumOrderByAggregateInput = {
+    visitFrequency?: SortOrder
   }
 
   export type EnumAssistanceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11471,6 +11811,20 @@ export namespace Prisma {
     connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
   }
 
+  export type PatientCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<PatientCreateWithoutAssignedToInput, PatientUncheckedCreateWithoutAssignedToInput> | PatientCreateWithoutAssignedToInput[] | PatientUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutAssignedToInput | PatientCreateOrConnectWithoutAssignedToInput[]
+    createMany?: PatientCreateManyAssignedToInputEnvelope
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+  }
+
+  export type PatientCreateNestedManyWithoutLastAssignedByInput = {
+    create?: XOR<PatientCreateWithoutLastAssignedByInput, PatientUncheckedCreateWithoutLastAssignedByInput> | PatientCreateWithoutLastAssignedByInput[] | PatientUncheckedCreateWithoutLastAssignedByInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutLastAssignedByInput | PatientCreateOrConnectWithoutLastAssignedByInput[]
+    createMany?: PatientCreateManyLastAssignedByInputEnvelope
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+  }
+
   export type AppointmentCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<AppointmentCreateWithoutCreatedByInput, AppointmentUncheckedCreateWithoutCreatedByInput> | AppointmentCreateWithoutCreatedByInput[] | AppointmentUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutCreatedByInput | AppointmentCreateOrConnectWithoutCreatedByInput[]
@@ -11510,6 +11864,20 @@ export namespace Prisma {
     create?: XOR<PatientCreateWithoutCreatedByInput, PatientUncheckedCreateWithoutCreatedByInput> | PatientCreateWithoutCreatedByInput[] | PatientUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: PatientCreateOrConnectWithoutCreatedByInput | PatientCreateOrConnectWithoutCreatedByInput[]
     createMany?: PatientCreateManyCreatedByInputEnvelope
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+  }
+
+  export type PatientUncheckedCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<PatientCreateWithoutAssignedToInput, PatientUncheckedCreateWithoutAssignedToInput> | PatientCreateWithoutAssignedToInput[] | PatientUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutAssignedToInput | PatientCreateOrConnectWithoutAssignedToInput[]
+    createMany?: PatientCreateManyAssignedToInputEnvelope
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+  }
+
+  export type PatientUncheckedCreateNestedManyWithoutLastAssignedByInput = {
+    create?: XOR<PatientCreateWithoutLastAssignedByInput, PatientUncheckedCreateWithoutLastAssignedByInput> | PatientCreateWithoutLastAssignedByInput[] | PatientUncheckedCreateWithoutLastAssignedByInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutLastAssignedByInput | PatientCreateOrConnectWithoutLastAssignedByInput[]
+    createMany?: PatientCreateManyLastAssignedByInputEnvelope
     connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
   }
 
@@ -11584,6 +11952,34 @@ export namespace Prisma {
     connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
     update?: PatientUpdateWithWhereUniqueWithoutCreatedByInput | PatientUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: PatientUpdateManyWithWhereWithoutCreatedByInput | PatientUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
+  }
+
+  export type PatientUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<PatientCreateWithoutAssignedToInput, PatientUncheckedCreateWithoutAssignedToInput> | PatientCreateWithoutAssignedToInput[] | PatientUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutAssignedToInput | PatientCreateOrConnectWithoutAssignedToInput[]
+    upsert?: PatientUpsertWithWhereUniqueWithoutAssignedToInput | PatientUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: PatientCreateManyAssignedToInputEnvelope
+    set?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    disconnect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    delete?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    update?: PatientUpdateWithWhereUniqueWithoutAssignedToInput | PatientUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: PatientUpdateManyWithWhereWithoutAssignedToInput | PatientUpdateManyWithWhereWithoutAssignedToInput[]
+    deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
+  }
+
+  export type PatientUpdateManyWithoutLastAssignedByNestedInput = {
+    create?: XOR<PatientCreateWithoutLastAssignedByInput, PatientUncheckedCreateWithoutLastAssignedByInput> | PatientCreateWithoutLastAssignedByInput[] | PatientUncheckedCreateWithoutLastAssignedByInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutLastAssignedByInput | PatientCreateOrConnectWithoutLastAssignedByInput[]
+    upsert?: PatientUpsertWithWhereUniqueWithoutLastAssignedByInput | PatientUpsertWithWhereUniqueWithoutLastAssignedByInput[]
+    createMany?: PatientCreateManyLastAssignedByInputEnvelope
+    set?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    disconnect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    delete?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    update?: PatientUpdateWithWhereUniqueWithoutLastAssignedByInput | PatientUpdateWithWhereUniqueWithoutLastAssignedByInput[]
+    updateMany?: PatientUpdateManyWithWhereWithoutLastAssignedByInput | PatientUpdateManyWithWhereWithoutLastAssignedByInput[]
     deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
   }
 
@@ -11671,6 +12067,34 @@ export namespace Prisma {
     deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
   }
 
+  export type PatientUncheckedUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<PatientCreateWithoutAssignedToInput, PatientUncheckedCreateWithoutAssignedToInput> | PatientCreateWithoutAssignedToInput[] | PatientUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutAssignedToInput | PatientCreateOrConnectWithoutAssignedToInput[]
+    upsert?: PatientUpsertWithWhereUniqueWithoutAssignedToInput | PatientUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: PatientCreateManyAssignedToInputEnvelope
+    set?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    disconnect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    delete?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    update?: PatientUpdateWithWhereUniqueWithoutAssignedToInput | PatientUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: PatientUpdateManyWithWhereWithoutAssignedToInput | PatientUpdateManyWithWhereWithoutAssignedToInput[]
+    deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
+  }
+
+  export type PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput = {
+    create?: XOR<PatientCreateWithoutLastAssignedByInput, PatientUncheckedCreateWithoutLastAssignedByInput> | PatientCreateWithoutLastAssignedByInput[] | PatientUncheckedCreateWithoutLastAssignedByInput[]
+    connectOrCreate?: PatientCreateOrConnectWithoutLastAssignedByInput | PatientCreateOrConnectWithoutLastAssignedByInput[]
+    upsert?: PatientUpsertWithWhereUniqueWithoutLastAssignedByInput | PatientUpsertWithWhereUniqueWithoutLastAssignedByInput[]
+    createMany?: PatientCreateManyLastAssignedByInputEnvelope
+    set?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    disconnect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    delete?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    connect?: PatientWhereUniqueInput | PatientWhereUniqueInput[]
+    update?: PatientUpdateWithWhereUniqueWithoutLastAssignedByInput | PatientUpdateWithWhereUniqueWithoutLastAssignedByInput[]
+    updateMany?: PatientUpdateManyWithWhereWithoutLastAssignedByInput | PatientUpdateManyWithWhereWithoutLastAssignedByInput[]
+    deleteMany?: PatientScalarWhereInput | PatientScalarWhereInput[]
+  }
+
   export type AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput = {
     create?: XOR<AppointmentCreateWithoutCreatedByInput, AppointmentUncheckedCreateWithoutCreatedByInput> | AppointmentCreateWithoutCreatedByInput[] | AppointmentUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutCreatedByInput | AppointmentCreateOrConnectWithoutCreatedByInput[]
@@ -11705,6 +12129,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutAssignedPatientsInput = {
+    create?: XOR<UserCreateWithoutAssignedPatientsInput, UserUncheckedCreateWithoutAssignedPatientsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedPatientsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutLastAssignedPatientsInput = {
+    create?: XOR<UserCreateWithoutLastAssignedPatientsInput, UserUncheckedCreateWithoutLastAssignedPatientsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLastAssignedPatientsInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type AppointmentCreateNestedManyWithoutPatientInput = {
     create?: XOR<AppointmentCreateWithoutPatientInput, AppointmentUncheckedCreateWithoutPatientInput> | AppointmentCreateWithoutPatientInput[] | AppointmentUncheckedCreateWithoutPatientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPatientInput | AppointmentCreateOrConnectWithoutPatientInput[]
@@ -11729,6 +12165,26 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCreatedPatientsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedPatientsInput, UserUpdateWithoutCreatedPatientsInput>, UserUncheckedUpdateWithoutCreatedPatientsInput>
+  }
+
+  export type UserUpdateOneWithoutAssignedPatientsNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedPatientsInput, UserUncheckedCreateWithoutAssignedPatientsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedPatientsInput
+    upsert?: UserUpsertWithoutAssignedPatientsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedPatientsInput, UserUpdateWithoutAssignedPatientsInput>, UserUncheckedUpdateWithoutAssignedPatientsInput>
+  }
+
+  export type UserUpdateOneWithoutLastAssignedPatientsNestedInput = {
+    create?: XOR<UserCreateWithoutLastAssignedPatientsInput, UserUncheckedCreateWithoutLastAssignedPatientsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLastAssignedPatientsInput
+    upsert?: UserUpsertWithoutLastAssignedPatientsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLastAssignedPatientsInput, UserUpdateWithoutLastAssignedPatientsInput>, UserUncheckedUpdateWithoutLastAssignedPatientsInput>
   }
 
   export type AppointmentUpdateManyWithoutPatientNestedInput = {
@@ -12020,6 +12476,8 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12038,6 +12496,8 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12072,6 +12532,8 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12090,6 +12552,8 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12108,6 +12572,8 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12126,6 +12592,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12160,6 +12628,8 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12178,6 +12648,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12196,6 +12668,8 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12214,6 +12688,8 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12248,6 +12724,8 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12266,6 +12744,8 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12366,9 +12846,14 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastAssignedAt?: Date | string | null
+    assignedTo?: UserCreateNestedOneWithoutAssignedPatientsInput
+    lastAssignedBy?: UserCreateNestedOneWithoutLastAssignedPatientsInput
     appointments?: AppointmentCreateNestedManyWithoutPatientInput
   }
 
@@ -12386,9 +12871,14 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedToId?: string | null
+    lastAssignedById?: string | null
+    lastAssignedAt?: Date | string | null
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
   }
 
@@ -12399,6 +12889,124 @@ export namespace Prisma {
 
   export type PatientCreateManyCreatedByInputEnvelope = {
     data: PatientCreateManyCreatedByInput | PatientCreateManyCreatedByInput[]
+  }
+
+  export type PatientCreateWithoutAssignedToInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    fiscalCode?: string | null
+    address?: string | null
+    houseNumber?: string | null
+    city?: string | null
+    postalCode?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lastAssignedAt?: Date | string | null
+    createdBy: UserCreateNestedOneWithoutCreatedPatientsInput
+    lastAssignedBy?: UserCreateNestedOneWithoutLastAssignedPatientsInput
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutAssignedToInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    fiscalCode?: string | null
+    address?: string | null
+    houseNumber?: string | null
+    city?: string | null
+    postalCode?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById: string
+    lastAssignedById?: string | null
+    lastAssignedAt?: Date | string | null
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutAssignedToInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutAssignedToInput, PatientUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type PatientCreateManyAssignedToInputEnvelope = {
+    data: PatientCreateManyAssignedToInput | PatientCreateManyAssignedToInput[]
+  }
+
+  export type PatientCreateWithoutLastAssignedByInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    fiscalCode?: string | null
+    address?: string | null
+    houseNumber?: string | null
+    city?: string | null
+    postalCode?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lastAssignedAt?: Date | string | null
+    createdBy: UserCreateNestedOneWithoutCreatedPatientsInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedPatientsInput
+    appointments?: AppointmentCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientUncheckedCreateWithoutLastAssignedByInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    fiscalCode?: string | null
+    address?: string | null
+    houseNumber?: string | null
+    city?: string | null
+    postalCode?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById: string
+    assignedToId?: string | null
+    lastAssignedAt?: Date | string | null
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPatientInput
+  }
+
+  export type PatientCreateOrConnectWithoutLastAssignedByInput = {
+    where: PatientWhereUniqueInput
+    create: XOR<PatientCreateWithoutLastAssignedByInput, PatientUncheckedCreateWithoutLastAssignedByInput>
+  }
+
+  export type PatientCreateManyLastAssignedByInputEnvelope = {
+    data: PatientCreateManyLastAssignedByInput | PatientCreateManyLastAssignedByInput[]
   }
 
   export type AppointmentCreateWithoutCreatedByInput = {
@@ -12588,10 +13196,47 @@ export namespace Prisma {
     phone2?: StringNullableFilter<"Patient"> | string | null
     assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringFilter<"Patient"> | string
+    nextVisitDate?: DateTimeNullableFilter<"Patient"> | Date | string | null
+    visitFrequency?: IntNullableFilter<"Patient"> | number | null
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
     createdById?: StringFilter<"Patient"> | string
+    assignedToId?: StringNullableFilter<"Patient"> | string | null
+    lastAssignedById?: StringNullableFilter<"Patient"> | string | null
+    lastAssignedAt?: DateTimeNullableFilter<"Patient"> | Date | string | null
+  }
+
+  export type PatientUpsertWithWhereUniqueWithoutAssignedToInput = {
+    where: PatientWhereUniqueInput
+    update: XOR<PatientUpdateWithoutAssignedToInput, PatientUncheckedUpdateWithoutAssignedToInput>
+    create: XOR<PatientCreateWithoutAssignedToInput, PatientUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type PatientUpdateWithWhereUniqueWithoutAssignedToInput = {
+    where: PatientWhereUniqueInput
+    data: XOR<PatientUpdateWithoutAssignedToInput, PatientUncheckedUpdateWithoutAssignedToInput>
+  }
+
+  export type PatientUpdateManyWithWhereWithoutAssignedToInput = {
+    where: PatientScalarWhereInput
+    data: XOR<PatientUpdateManyMutationInput, PatientUncheckedUpdateManyWithoutAssignedToInput>
+  }
+
+  export type PatientUpsertWithWhereUniqueWithoutLastAssignedByInput = {
+    where: PatientWhereUniqueInput
+    update: XOR<PatientUpdateWithoutLastAssignedByInput, PatientUncheckedUpdateWithoutLastAssignedByInput>
+    create: XOR<PatientCreateWithoutLastAssignedByInput, PatientUncheckedCreateWithoutLastAssignedByInput>
+  }
+
+  export type PatientUpdateWithWhereUniqueWithoutLastAssignedByInput = {
+    where: PatientWhereUniqueInput
+    data: XOR<PatientUpdateWithoutLastAssignedByInput, PatientUncheckedUpdateWithoutLastAssignedByInput>
+  }
+
+  export type PatientUpdateManyWithWhereWithoutLastAssignedByInput = {
+    where: PatientScalarWhereInput
+    data: XOR<PatientUpdateManyMutationInput, PatientUncheckedUpdateManyWithoutLastAssignedByInput>
   }
 
   export type AppointmentUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -12656,6 +13301,8 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12674,6 +13321,8 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
     lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
   }
@@ -12681,6 +13330,96 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutCreatedPatientsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutCreatedPatientsInput, UserUncheckedCreateWithoutCreatedPatientsInput>
+  }
+
+  export type UserCreateWithoutAssignedPatientsInput = {
+    id?: string
+    username: string
+    password: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutCreatedByInput
+    createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
+    createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
+    lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedPatientsInput = {
+    id?: string
+    username: string
+    password: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
+    createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
+    createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
+    lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedPatientsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedPatientsInput, UserUncheckedCreateWithoutAssignedPatientsInput>
+  }
+
+  export type UserCreateWithoutLastAssignedPatientsInput = {
+    id?: string
+    username: string
+    password: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutCreatedByInput
+    createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
+    lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
+  }
+
+  export type UserUncheckedCreateWithoutLastAssignedPatientsInput = {
+    id?: string
+    username: string
+    password: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
+    createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
+    lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
+  }
+
+  export type UserCreateOrConnectWithoutLastAssignedPatientsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLastAssignedPatientsInput, UserUncheckedCreateWithoutLastAssignedPatientsInput>
   }
 
   export type AppointmentCreateWithoutPatientInput = {
@@ -12741,6 +13480,8 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12759,6 +13500,110 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
+    createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
+  }
+
+  export type UserUpsertWithoutAssignedPatientsInput = {
+    update: XOR<UserUpdateWithoutAssignedPatientsInput, UserUncheckedUpdateWithoutAssignedPatientsInput>
+    create: XOR<UserCreateWithoutAssignedPatientsInput, UserUncheckedCreateWithoutAssignedPatientsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedPatientsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedPatientsInput, UserUncheckedUpdateWithoutAssignedPatientsInput>
+  }
+
+  export type UserUpdateWithoutAssignedPatientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutCreatedByNestedInput
+    createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
+    createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
+    lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedPatientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
+    createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
+    lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
+  }
+
+  export type UserUpsertWithoutLastAssignedPatientsInput = {
+    update: XOR<UserUpdateWithoutLastAssignedPatientsInput, UserUncheckedUpdateWithoutLastAssignedPatientsInput>
+    create: XOR<UserCreateWithoutLastAssignedPatientsInput, UserUncheckedCreateWithoutLastAssignedPatientsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLastAssignedPatientsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLastAssignedPatientsInput, UserUncheckedUpdateWithoutLastAssignedPatientsInput>
+  }
+
+  export type UserUpdateWithoutLastAssignedPatientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutCreatedByNestedInput
+    createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
+    lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLastAssignedPatientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
     createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
     lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
   }
@@ -12793,10 +13638,15 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastAssignedAt?: Date | string | null
     createdBy: UserCreateNestedOneWithoutCreatedPatientsInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedPatientsInput
+    lastAssignedBy?: UserCreateNestedOneWithoutLastAssignedPatientsInput
   }
 
   export type PatientUncheckedCreateWithoutAppointmentsInput = {
@@ -12813,10 +13663,15 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdById: string
+    assignedToId?: string | null
+    lastAssignedById?: string | null
+    lastAssignedAt?: Date | string | null
   }
 
   export type PatientCreateOrConnectWithoutAppointmentsInput = {
@@ -12839,6 +13694,8 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
     lastModifiedAppointments?: AppointmentCreateNestedManyWithoutLastModifiedByInput
   }
 
@@ -12857,6 +13714,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
     lastModifiedAppointments?: AppointmentUncheckedCreateNestedManyWithoutLastModifiedByInput
   }
 
@@ -12880,6 +13739,8 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentCreateNestedManyWithoutCreatedByInput
   }
 
@@ -12898,6 +13759,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
     createdPatients?: PatientUncheckedCreateNestedManyWithoutCreatedByInput
+    assignedPatients?: PatientUncheckedCreateNestedManyWithoutAssignedToInput
+    lastAssignedPatients?: PatientUncheckedCreateNestedManyWithoutLastAssignedByInput
     createdAppointments?: AppointmentUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
@@ -12931,10 +13794,15 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdBy?: UserUpdateOneRequiredWithoutCreatedPatientsNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedPatientsNestedInput
+    lastAssignedBy?: UserUpdateOneWithoutLastAssignedPatientsNestedInput
   }
 
   export type PatientUncheckedUpdateWithoutAppointmentsInput = {
@@ -12951,10 +13819,15 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUpsertWithoutCreatedAppointmentsInput = {
@@ -12983,6 +13856,8 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
     lastModifiedAppointments?: AppointmentUpdateManyWithoutLastModifiedByNestedInput
   }
 
@@ -13001,6 +13876,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
     lastModifiedAppointments?: AppointmentUncheckedUpdateManyWithoutLastModifiedByNestedInput
   }
 
@@ -13030,6 +13907,8 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUpdateManyWithoutCreatedByNestedInput
   }
 
@@ -13048,6 +13927,8 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
     createdPatients?: PatientUncheckedUpdateManyWithoutCreatedByNestedInput
+    assignedPatients?: PatientUncheckedUpdateManyWithoutAssignedToNestedInput
+    lastAssignedPatients?: PatientUncheckedUpdateManyWithoutLastAssignedByNestedInput
     createdAppointments?: AppointmentUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
@@ -13093,9 +13974,62 @@ export namespace Prisma {
     phone2?: string | null
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    assignedToId?: string | null
+    lastAssignedById?: string | null
+    lastAssignedAt?: Date | string | null
+  }
+
+  export type PatientCreateManyAssignedToInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    fiscalCode?: string | null
+    address?: string | null
+    houseNumber?: string | null
+    city?: string | null
+    postalCode?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById: string
+    lastAssignedById?: string | null
+    lastAssignedAt?: Date | string | null
+  }
+
+  export type PatientCreateManyLastAssignedByInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    dateOfBirth?: Date | string | null
+    fiscalCode?: string | null
+    address?: string | null
+    houseNumber?: string | null
+    city?: string | null
+    postalCode?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
+    nextVisitDate?: Date | string | null
+    visitFrequency?: number | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById: string
+    assignedToId?: string | null
+    lastAssignedAt?: Date | string | null
   }
 
   export type AppointmentCreateManyCreatedByInput = {
@@ -13219,9 +14153,14 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedTo?: UserUpdateOneWithoutAssignedPatientsNestedInput
+    lastAssignedBy?: UserUpdateOneWithoutLastAssignedPatientsNestedInput
     appointments?: AppointmentUpdateManyWithoutPatientNestedInput
   }
 
@@ -13239,9 +14178,14 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
   }
 
@@ -13259,9 +14203,162 @@ export namespace Prisma {
     phone2?: NullableStringFieldUpdateOperationsInput | string | null
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PatientUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdBy?: UserUpdateOneRequiredWithoutCreatedPatientsNestedInput
+    lastAssignedBy?: UserUpdateOneWithoutLastAssignedPatientsNestedInput
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    lastAssignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateManyWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    lastAssignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PatientUpdateWithoutLastAssignedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdBy?: UserUpdateOneRequiredWithoutCreatedPatientsNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedPatientsNestedInput
+    appointments?: AppointmentUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateWithoutLastAssignedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    appointments?: AppointmentUncheckedUpdateManyWithoutPatientNestedInput
+  }
+
+  export type PatientUncheckedUpdateManyWithoutLastAssignedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
+    nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    lastAssignedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AppointmentUpdateWithoutCreatedByInput = {

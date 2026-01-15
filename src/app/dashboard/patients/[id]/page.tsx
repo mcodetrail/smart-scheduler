@@ -1,14 +1,21 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 
-export default function NewPatientPage() {
+export default function EditPatientPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
   const router = useRouter();
-  const { data: session } = useSession();
+  const utils = api.useUtils();
+  const { data: patient, isLoading } = api.patient.getById.useQuery({
+    id: id,
+  });
   const { data: nurses } = api.auth.getAllNurses.useQuery();
 
   const [formData, setFormData] = useState<{
@@ -43,17 +50,48 @@ export default function NewPatientPage() {
     exemptionCode: "",
     nextVisitDate: "",
     visitFrequency: "",
-    assignedToId: session?.user?.id || "",
+    assignedToId: "",
     notes: "",
   });
 
-  const createPatient = api.patient.create.useMutation({
-    onSuccess: () => {
+  useEffect(() => {
+    if (patient) {
+      setFormData({
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+        dateOfBirth:
+          patient.dateOfBirth != null
+            ? new Date(patient.dateOfBirth).toISOString().split("T")[0]
+            : "",
+        fiscalCode: patient.fiscalCode || "",
+        address: patient.address || "",
+        houseNumber: patient.houseNumber || "",
+        city: patient.city || "",
+        postalCode: patient.postalCode || "",
+        phone1: patient.phone1,
+        phone2: patient.phone2 || "",
+        assistanceType: patient.assistanceType || "",
+        exemptionCode: patient.exemptionCode,
+        nextVisitDate:
+          patient.nextVisitDate != null
+            ? new Date(patient.nextVisitDate).toISOString().split("T")[0]
+            : "",
+        visitFrequency: patient.visitFrequency?.toString() || "",
+        assignedToId: patient.assignedToId || "",
+        notes: patient.notes || "",
+      });
+    }
+  }, [patient]);
+
+  const updatePatient = api.patient.update.useMutation({
+    onSuccess: async () => {
+      await utils.patient.getByVisitDate.invalidate();
+      await utils.patient.getById.invalidate();
       router.push("/dashboard");
       router.refresh();
     },
     onError: (error) => {
-      console.error("Errore durante la creazione del paziente:", error);
+      console.error("Errore durante l'aggiornamento del paziente:", error);
       alert(`Errore: ${error.message}`);
     },
   });
@@ -61,7 +99,6 @@ export default function NewPatientPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate required fields
     if (!formData.firstName.trim() || !formData.lastName.trim()) {
       alert("Nome e cognome sono obbligatori");
       return;
@@ -77,13 +114,13 @@ export default function NewPatientPage() {
       return;
     }
 
-    // Validate fiscal code length if provided
     if (formData.fiscalCode && formData.fiscalCode.trim().length !== 16) {
       alert("Il codice fiscale deve essere di 16 caratteri");
       return;
     }
 
-    createPatient.mutate({
+    updatePatient.mutate({
+      id: id,
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       dateOfBirth: formData.dateOfBirth
@@ -125,12 +162,30 @@ export default function NewPatientPage() {
     }));
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-lg">Caricamento...</div>
+      </div>
+    );
+  }
+
+  if (!patient) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-lg">Paziente non trovato</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="border-b bg-white shadow-sm">
         <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Nuovo Paziente</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Modifica Paziente
+            </h1>
             <Link
               href="/dashboard"
               className="text-sm text-gray-600 hover:text-gray-900"
@@ -146,12 +201,6 @@ export default function NewPatientPage() {
           onSubmit={handleSubmit}
           className="space-y-8 rounded-lg bg-white p-6 shadow"
         >
-          {createPatient.error && (
-            <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
-              {createPatient.error.message}
-            </div>
-          )}
-
           {/* Personal Information */}
           <div>
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
@@ -173,9 +222,10 @@ export default function NewPatientPage() {
                   value={formData.lastName}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
+
               <div>
                 <label
                   htmlFor="firstName"
@@ -191,7 +241,7 @@ export default function NewPatientPage() {
                   value={formData.firstName}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
 
@@ -209,7 +259,7 @@ export default function NewPatientPage() {
                   value={formData.dateOfBirth}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
 
@@ -228,7 +278,7 @@ export default function NewPatientPage() {
                   value={formData.fiscalCode}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 uppercase shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
             </div>
@@ -254,7 +304,7 @@ export default function NewPatientPage() {
                   value={formData.address}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
 
@@ -272,7 +322,7 @@ export default function NewPatientPage() {
                   value={formData.houseNumber}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
 
@@ -290,7 +340,7 @@ export default function NewPatientPage() {
                   value={formData.city}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
 
@@ -305,11 +355,10 @@ export default function NewPatientPage() {
                   id="postalCode"
                   name="postalCode"
                   type="text"
-                  maxLength={5}
                   value={formData.postalCode}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
 
@@ -328,9 +377,10 @@ export default function NewPatientPage() {
                   value={formData.phone1}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
+
               <div>
                 <label
                   htmlFor="phone2"
@@ -345,11 +395,13 @@ export default function NewPatientPage() {
                   value={formData.phone2}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
             </div>
           </div>
+
+          {/* Visit Planning */}
           <div>
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Pianificazione Visite
@@ -369,7 +421,7 @@ export default function NewPatientPage() {
                   value={formData.nextVisitDate}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
 
@@ -388,21 +440,17 @@ export default function NewPatientPage() {
                   value={formData.visitFrequency}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                   placeholder="Es: 7 per visite settimanali"
                 />
               </div>
-            </div>
-          </div>
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">Altro</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+
               <div>
                 <label
                   htmlFor="assignedToId"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Infermiere Assegnato
+                  Assegnato a
                 </label>
                 <select
                   id="assignedToId"
@@ -410,17 +458,22 @@ export default function NewPatientPage() {
                   value={formData.assignedToId}
                   onChange={handleSelectChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 >
-                  <option value="">Seleziona infermiere...</option>
+                  <option value="">Seleziona infermiere</option>
                   {nurses?.map((nurse) => (
                     <option key={nurse.id} value={nurse.id}>
-                      {nurse.name || nurse.username}
+                      {nurse.name}
                     </option>
                   ))}
                 </select>
               </div>
+            </div>
+          </div>
 
+          {/* Other */}
+          <div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
                 <label
                   htmlFor="assistanceType"
@@ -434,7 +487,7 @@ export default function NewPatientPage() {
                   value={formData.assistanceType}
                   onChange={handleSelectChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 >
                   <option value="">Seleziona...</option>
                   <option value="ADI">
@@ -469,14 +522,13 @@ export default function NewPatientPage() {
                   value={formData.exemptionCode}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
+                  disabled={updatePatient.isPending}
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">Note</h2>
             <textarea
               id="notes"
               name="notes"
@@ -484,8 +536,8 @@ export default function NewPatientPage() {
               value={formData.notes}
               onChange={handleChange}
               className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              placeholder="Note aggiuntive sul paziente..."
-              disabled={createPatient.isPending}
+              placeholder="Note aggiuntive sulla visita..."
+              disabled={updatePatient.isPending}
             />
           </div>
 
@@ -499,10 +551,10 @@ export default function NewPatientPage() {
             </Link>
             <button
               type="submit"
-              disabled={createPatient.isPending}
+              disabled={updatePatient.isPending}
               className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {createPatient.isPending ? "Salvataggio..." : "Salva Paziente"}
+              {updatePatient.isPending ? "Salvataggio..." : "Salva Modifiche"}
             </button>
           </div>
         </form>

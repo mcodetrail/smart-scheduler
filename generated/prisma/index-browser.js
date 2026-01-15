@@ -176,10 +176,15 @@ exports.Prisma.PatientScalarFieldEnum = {
   phone2: 'phone2',
   assistanceType: 'assistanceType',
   exemptionCode: 'exemptionCode',
+  nextVisitDate: 'nextVisitDate',
+  visitFrequency: 'visitFrequency',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  createdById: 'createdById'
+  createdById: 'createdById',
+  assignedToId: 'assignedToId',
+  lastAssignedById: 'lastAssignedById',
+  lastAssignedAt: 'lastAssignedAt'
 };
 
 exports.Prisma.AppointmentScalarFieldEnum = {

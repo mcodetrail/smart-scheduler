@@ -58,7 +58,7 @@ model Session {
 model User {
     id            String    @id @default(cuid())
     username      String    @unique
-    password      String    // bcrypt hashed password
+    password      String // bcrypt hashed password
     name          String?
     email         String?   @unique
     emailVerified DateTime?
@@ -66,18 +66,20 @@ model User {
     role          String    @default("nurse") // nurse, admin, etc.
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
-    
-    accounts              Account[]
-    sessions              Session[]
-    posts                 Post[]
-    createdPatients       Patient[]
-    createdAppointments   Appointment[] @relation("CreatedAppointments")
+
+    accounts                 Account[]
+    sessions                 Session[]
+    posts                    Post[]
+    createdPatients          Patient[]     @relation("CreatedPatients")
+    assignedPatients         Patient[]     @relation("AssignedPatients")
+    lastAssignedPatients     Patient[]     @relation("LastAssignedPatients")
+    createdAppointments      Appointment[] @relation("CreatedAppointments")
     lastModifiedAppointments Appointment[] @relation("LastModifiedAppointments")
 }
 
 enum AssistanceType {
-    ADI          // Assistenza Domiciliare Integrata
-    ADP          // Assistenza Domiciliare Programmata
+    ADI // Assistenza Domiciliare Integrata
+    ADP // Assistenza Domiciliare Programmata
     CURE_PALLIATIVE
     DIMISSIONE_PROTETTA
     RIABILITAZIONE
@@ -91,45 +93,53 @@ model Patient {
     dateOfBirth    DateTime?
     fiscalCode     String?         @unique // Codice Fiscale
     address        String?
-    houseNumber    String?         // Numero civico
+    houseNumber    String? // Numero civico
     city           String?
     postalCode     String?
-    phone1         String          // Telefono principale (obbligatorio)
-    phone2         String?         // Telefono secondario
+    phone1         String // Telefono principale (obbligatorio)
+    phone2         String? // Telefono secondario
     assistanceType AssistanceType? // Tipo di assistenza
-    exemptionCode  String          // Codice esenzione
+    exemptionCode  String // Codice esenzione
+    nextVisitDate  DateTime? // Data prossima visita
+    visitFrequency Int? // Cadenza visite in giorni
     notes          String?
     createdAt      DateTime        @default(now())
     updatedAt      DateTime        @updatedAt
-    
-    createdBy      User            @relation(fields: [createdById], references: [id])
-    createdById    String
-    
-    appointments   Appointment[]
-    
+
+    createdBy        User      @relation("CreatedPatients", fields: [createdById], references: [id])
+    createdById      String
+    assignedTo       User?     @relation("AssignedPatients", fields: [assignedToId], references: [id])
+    assignedToId     String?
+    lastAssignedBy   User?     @relation("LastAssignedPatients", fields: [lastAssignedById], references: [id])
+    lastAssignedById String?
+    lastAssignedAt   DateTime?
+
+    appointments Appointment[]
+
     @@index([lastName, firstName])
     @@index([fiscalCode])
     @@index([phone1])
+    @@index([nextVisitDate])
 }
 
 model Appointment {
-    id              String   @id @default(cuid())
-    patientId       String
-    patient         Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
-    
-    scheduledDate   DateTime
-    duration        Int      @default(60) // duration in minutes
-    status          String   @default("scheduled") // scheduled, completed, cancelled
-    notes           String?
-    
-    createdAt       DateTime @default(now())
-    createdBy       User     @relation("CreatedAppointments", fields: [createdById], references: [id])
-    createdById     String
-    
-    lastModifiedAt  DateTime @updatedAt
-    lastModifiedBy  User     @relation("LastModifiedAppointments", fields: [lastModifiedById], references: [id])
+    id        String  @id @default(cuid())
+    patientId String
+    patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+    scheduledDate DateTime
+    duration      Int      @default(60) // duration in minutes
+    status        String   @default("scheduled") // scheduled, completed, cancelled
+    notes         String?
+
+    createdAt   DateTime @default(now())
+    createdBy   User     @relation("CreatedAppointments", fields: [createdById], references: [id])
+    createdById String
+
+    lastModifiedAt   DateTime @updatedAt
+    lastModifiedBy   User     @relation("LastModifiedAppointments", fields: [lastModifiedById], references: [id])
     lastModifiedById String
-    
+
     @@index([patientId])
     @@index([scheduledDate])
     @@index([createdById])
