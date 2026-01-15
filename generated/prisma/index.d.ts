@@ -50,6 +50,27 @@ export type Appointment = $Result.DefaultSelection<Prisma.$AppointmentPayload>
 export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTokenPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const AssistanceType: {
+  ADI: 'ADI',
+  ADP: 'ADP',
+  CURE_PALLIATIVE: 'CURE_PALLIATIVE',
+  DIMISSIONE_PROTETTA: 'DIMISSIONE_PROTETTA',
+  RIABILITAZIONE: 'RIABILITAZIONE',
+  PRESTAZIONI_INFERMIERISTICHE: 'PRESTAZIONI_INFERMIERISTICHE'
+};
+
+export type AssistanceType = (typeof AssistanceType)[keyof typeof AssistanceType]
+
+}
+
+export type AssistanceType = $Enums.AssistanceType
+
+export const AssistanceType: typeof $Enums.AssistanceType
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -6134,10 +6155,13 @@ export namespace Prisma {
     dateOfBirth: Date | null
     fiscalCode: string | null
     address: string | null
+    houseNumber: string | null
     city: string | null
     postalCode: string | null
-    phone: string | null
-    email: string | null
+    phone1: string | null
+    phone2: string | null
+    assistanceType: $Enums.AssistanceType | null
+    exemptionCode: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -6151,10 +6175,13 @@ export namespace Prisma {
     dateOfBirth: Date | null
     fiscalCode: string | null
     address: string | null
+    houseNumber: string | null
     city: string | null
     postalCode: string | null
-    phone: string | null
-    email: string | null
+    phone1: string | null
+    phone2: string | null
+    assistanceType: $Enums.AssistanceType | null
+    exemptionCode: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -6168,10 +6195,13 @@ export namespace Prisma {
     dateOfBirth: number
     fiscalCode: number
     address: number
+    houseNumber: number
     city: number
     postalCode: number
-    phone: number
-    email: number
+    phone1: number
+    phone2: number
+    assistanceType: number
+    exemptionCode: number
     notes: number
     createdAt: number
     updatedAt: number
@@ -6187,10 +6217,13 @@ export namespace Prisma {
     dateOfBirth?: true
     fiscalCode?: true
     address?: true
+    houseNumber?: true
     city?: true
     postalCode?: true
-    phone?: true
-    email?: true
+    phone1?: true
+    phone2?: true
+    assistanceType?: true
+    exemptionCode?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -6204,10 +6237,13 @@ export namespace Prisma {
     dateOfBirth?: true
     fiscalCode?: true
     address?: true
+    houseNumber?: true
     city?: true
     postalCode?: true
-    phone?: true
-    email?: true
+    phone1?: true
+    phone2?: true
+    assistanceType?: true
+    exemptionCode?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -6221,10 +6257,13 @@ export namespace Prisma {
     dateOfBirth?: true
     fiscalCode?: true
     address?: true
+    houseNumber?: true
     city?: true
     postalCode?: true
-    phone?: true
-    email?: true
+    phone1?: true
+    phone2?: true
+    assistanceType?: true
+    exemptionCode?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -6311,10 +6350,13 @@ export namespace Prisma {
     dateOfBirth: Date | null
     fiscalCode: string | null
     address: string | null
+    houseNumber: string | null
     city: string | null
     postalCode: string | null
-    phone: string | null
-    email: string | null
+    phone1: string
+    phone2: string | null
+    assistanceType: $Enums.AssistanceType | null
+    exemptionCode: string
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -6345,10 +6387,13 @@ export namespace Prisma {
     dateOfBirth?: boolean
     fiscalCode?: boolean
     address?: boolean
+    houseNumber?: boolean
     city?: boolean
     postalCode?: boolean
-    phone?: boolean
-    email?: boolean
+    phone1?: boolean
+    phone2?: boolean
+    assistanceType?: boolean
+    exemptionCode?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6365,10 +6410,13 @@ export namespace Prisma {
     dateOfBirth?: boolean
     fiscalCode?: boolean
     address?: boolean
+    houseNumber?: boolean
     city?: boolean
     postalCode?: boolean
-    phone?: boolean
-    email?: boolean
+    phone1?: boolean
+    phone2?: boolean
+    assistanceType?: boolean
+    exemptionCode?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6383,10 +6431,13 @@ export namespace Prisma {
     dateOfBirth?: boolean
     fiscalCode?: boolean
     address?: boolean
+    houseNumber?: boolean
     city?: boolean
     postalCode?: boolean
-    phone?: boolean
-    email?: boolean
+    phone1?: boolean
+    phone2?: boolean
+    assistanceType?: boolean
+    exemptionCode?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6401,17 +6452,20 @@ export namespace Prisma {
     dateOfBirth?: boolean
     fiscalCode?: boolean
     address?: boolean
+    houseNumber?: boolean
     city?: boolean
     postalCode?: boolean
-    phone?: boolean
-    email?: boolean
+    phone1?: boolean
+    phone2?: boolean
+    assistanceType?: boolean
+    exemptionCode?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     createdById?: boolean
   }
 
-  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "fiscalCode" | "address" | "city" | "postalCode" | "phone" | "email" | "notes" | "createdAt" | "updatedAt" | "createdById", ExtArgs["result"]["patient"]>
+  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "fiscalCode" | "address" | "houseNumber" | "city" | "postalCode" | "phone1" | "phone2" | "assistanceType" | "exemptionCode" | "notes" | "createdAt" | "updatedAt" | "createdById", ExtArgs["result"]["patient"]>
   export type PatientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     appointments?: boolean | Patient$appointmentsArgs<ExtArgs>
@@ -6437,10 +6491,13 @@ export namespace Prisma {
       dateOfBirth: Date | null
       fiscalCode: string | null
       address: string | null
+      houseNumber: string | null
       city: string | null
       postalCode: string | null
-      phone: string | null
-      email: string | null
+      phone1: string
+      phone2: string | null
+      assistanceType: $Enums.AssistanceType | null
+      exemptionCode: string
       notes: string | null
       createdAt: Date
       updatedAt: Date
@@ -6876,10 +6933,13 @@ export namespace Prisma {
     readonly dateOfBirth: FieldRef<"Patient", 'DateTime'>
     readonly fiscalCode: FieldRef<"Patient", 'String'>
     readonly address: FieldRef<"Patient", 'String'>
+    readonly houseNumber: FieldRef<"Patient", 'String'>
     readonly city: FieldRef<"Patient", 'String'>
     readonly postalCode: FieldRef<"Patient", 'String'>
-    readonly phone: FieldRef<"Patient", 'String'>
-    readonly email: FieldRef<"Patient", 'String'>
+    readonly phone1: FieldRef<"Patient", 'String'>
+    readonly phone2: FieldRef<"Patient", 'String'>
+    readonly assistanceType: FieldRef<"Patient", 'AssistanceType'>
+    readonly exemptionCode: FieldRef<"Patient", 'String'>
     readonly notes: FieldRef<"Patient", 'String'>
     readonly createdAt: FieldRef<"Patient", 'DateTime'>
     readonly updatedAt: FieldRef<"Patient", 'DateTime'>
@@ -9532,10 +9592,13 @@ export namespace Prisma {
     dateOfBirth: 'dateOfBirth',
     fiscalCode: 'fiscalCode',
     address: 'address',
+    houseNumber: 'houseNumber',
     city: 'city',
     postalCode: 'postalCode',
-    phone: 'phone',
-    email: 'email',
+    phone1: 'phone1',
+    phone2: 'phone2',
+    assistanceType: 'assistanceType',
+    exemptionCode: 'exemptionCode',
     notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -9609,6 +9672,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'AssistanceType'
+   */
+  export type EnumAssistanceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssistanceType'>
     
 
 
@@ -9932,10 +10002,13 @@ export namespace Prisma {
     dateOfBirth?: DateTimeNullableFilter<"Patient"> | Date | string | null
     fiscalCode?: StringNullableFilter<"Patient"> | string | null
     address?: StringNullableFilter<"Patient"> | string | null
+    houseNumber?: StringNullableFilter<"Patient"> | string | null
     city?: StringNullableFilter<"Patient"> | string | null
     postalCode?: StringNullableFilter<"Patient"> | string | null
-    phone?: StringNullableFilter<"Patient"> | string | null
-    email?: StringNullableFilter<"Patient"> | string | null
+    phone1?: StringFilter<"Patient"> | string
+    phone2?: StringNullableFilter<"Patient"> | string | null
+    assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
+    exemptionCode?: StringFilter<"Patient"> | string
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
@@ -9951,10 +10024,13 @@ export namespace Prisma {
     dateOfBirth?: SortOrderInput | SortOrder
     fiscalCode?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    houseNumber?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     postalCode?: SortOrderInput | SortOrder
-    phone?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
+    phone1?: SortOrder
+    phone2?: SortOrderInput | SortOrder
+    assistanceType?: SortOrderInput | SortOrder
+    exemptionCode?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -9973,10 +10049,13 @@ export namespace Prisma {
     lastName?: StringFilter<"Patient"> | string
     dateOfBirth?: DateTimeNullableFilter<"Patient"> | Date | string | null
     address?: StringNullableFilter<"Patient"> | string | null
+    houseNumber?: StringNullableFilter<"Patient"> | string | null
     city?: StringNullableFilter<"Patient"> | string | null
     postalCode?: StringNullableFilter<"Patient"> | string | null
-    phone?: StringNullableFilter<"Patient"> | string | null
-    email?: StringNullableFilter<"Patient"> | string | null
+    phone1?: StringFilter<"Patient"> | string
+    phone2?: StringNullableFilter<"Patient"> | string | null
+    assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
+    exemptionCode?: StringFilter<"Patient"> | string
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
@@ -9992,10 +10071,13 @@ export namespace Prisma {
     dateOfBirth?: SortOrderInput | SortOrder
     fiscalCode?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    houseNumber?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     postalCode?: SortOrderInput | SortOrder
-    phone?: SortOrderInput | SortOrder
-    email?: SortOrderInput | SortOrder
+    phone1?: SortOrder
+    phone2?: SortOrderInput | SortOrder
+    assistanceType?: SortOrderInput | SortOrder
+    exemptionCode?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10015,10 +10097,13 @@ export namespace Prisma {
     dateOfBirth?: DateTimeNullableWithAggregatesFilter<"Patient"> | Date | string | null
     fiscalCode?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     address?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    houseNumber?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     city?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     postalCode?: StringNullableWithAggregatesFilter<"Patient"> | string | null
-    phone?: StringNullableWithAggregatesFilter<"Patient"> | string | null
-    email?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    phone1?: StringWithAggregatesFilter<"Patient"> | string
+    phone2?: StringNullableWithAggregatesFilter<"Patient"> | string | null
+    assistanceType?: EnumAssistanceTypeNullableWithAggregatesFilter<"Patient"> | $Enums.AssistanceType | null
+    exemptionCode?: StringWithAggregatesFilter<"Patient"> | string
     notes?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
@@ -10489,10 +10574,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10507,10 +10595,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10525,10 +10616,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10543,10 +10637,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10561,10 +10658,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10578,10 +10678,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10594,10 +10697,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11115,6 +11221,13 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumAssistanceTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssistanceType | EnumAssistanceTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AssistanceType[] | null
+    notIn?: $Enums.AssistanceType[] | null
+    not?: NestedEnumAssistanceTypeNullableFilter<$PrismaModel> | $Enums.AssistanceType | null
+  }
+
   export type PatientCountOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
@@ -11122,10 +11235,13 @@ export namespace Prisma {
     dateOfBirth?: SortOrder
     fiscalCode?: SortOrder
     address?: SortOrder
+    houseNumber?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
+    phone1?: SortOrder
+    phone2?: SortOrder
+    assistanceType?: SortOrder
+    exemptionCode?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11139,10 +11255,13 @@ export namespace Prisma {
     dateOfBirth?: SortOrder
     fiscalCode?: SortOrder
     address?: SortOrder
+    houseNumber?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
+    phone1?: SortOrder
+    phone2?: SortOrder
+    assistanceType?: SortOrder
+    exemptionCode?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11156,14 +11275,27 @@ export namespace Prisma {
     dateOfBirth?: SortOrder
     fiscalCode?: SortOrder
     address?: SortOrder
+    houseNumber?: SortOrder
     city?: SortOrder
     postalCode?: SortOrder
-    phone?: SortOrder
-    email?: SortOrder
+    phone1?: SortOrder
+    phone2?: SortOrder
+    assistanceType?: SortOrder
+    exemptionCode?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdById?: SortOrder
+  }
+
+  export type EnumAssistanceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssistanceType | EnumAssistanceTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AssistanceType[] | null
+    notIn?: $Enums.AssistanceType[] | null
+    not?: NestedEnumAssistanceTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AssistanceType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumAssistanceTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumAssistanceTypeNullableFilter<$PrismaModel>
   }
 
   export type PatientScalarRelationFilter = {
@@ -11587,6 +11719,10 @@ export namespace Prisma {
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
   }
 
+  export type NullableEnumAssistanceTypeFieldUpdateOperationsInput = {
+    set?: $Enums.AssistanceType | null
+  }
+
   export type UserUpdateOneRequiredWithoutCreatedPatientsNestedInput = {
     create?: XOR<UserCreateWithoutCreatedPatientsInput, UserUncheckedCreateWithoutCreatedPatientsInput>
     connectOrCreate?: UserCreateOrConnectWithoutCreatedPatientsInput
@@ -11851,6 +11987,23 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAssistanceTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssistanceType | EnumAssistanceTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AssistanceType[] | null
+    notIn?: $Enums.AssistanceType[] | null
+    not?: NestedEnumAssistanceTypeNullableFilter<$PrismaModel> | $Enums.AssistanceType | null
+  }
+
+  export type NestedEnumAssistanceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AssistanceType | EnumAssistanceTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.AssistanceType[] | null
+    notIn?: $Enums.AssistanceType[] | null
+    not?: NestedEnumAssistanceTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AssistanceType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumAssistanceTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumAssistanceTypeNullableFilter<$PrismaModel>
   }
 
   export type UserCreateWithoutPostsInput = {
@@ -12206,10 +12359,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12223,10 +12379,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12422,10 +12581,13 @@ export namespace Prisma {
     dateOfBirth?: DateTimeNullableFilter<"Patient"> | Date | string | null
     fiscalCode?: StringNullableFilter<"Patient"> | string | null
     address?: StringNullableFilter<"Patient"> | string | null
+    houseNumber?: StringNullableFilter<"Patient"> | string | null
     city?: StringNullableFilter<"Patient"> | string | null
     postalCode?: StringNullableFilter<"Patient"> | string | null
-    phone?: StringNullableFilter<"Patient"> | string | null
-    email?: StringNullableFilter<"Patient"> | string | null
+    phone1?: StringFilter<"Patient"> | string
+    phone2?: StringNullableFilter<"Patient"> | string | null
+    assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
+    exemptionCode?: StringFilter<"Patient"> | string
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
@@ -12624,10 +12786,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12641,10 +12806,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12756,10 +12924,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12773,10 +12944,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12912,10 +13086,13 @@ export namespace Prisma {
     dateOfBirth?: Date | string | null
     fiscalCode?: string | null
     address?: string | null
+    houseNumber?: string | null
     city?: string | null
     postalCode?: string | null
-    phone?: string | null
-    email?: string | null
+    phone1: string
+    phone2?: string | null
+    assistanceType?: $Enums.AssistanceType | null
+    exemptionCode: string
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13035,10 +13212,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13052,10 +13232,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13069,10 +13252,13 @@ export namespace Prisma {
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fiscalCode?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    houseNumber?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone1?: StringFieldUpdateOperationsInput | string
+    phone2?: NullableStringFieldUpdateOperationsInput | string | null
+    assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
+    exemptionCode?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

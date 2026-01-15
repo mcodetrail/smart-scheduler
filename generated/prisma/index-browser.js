@@ -169,10 +169,13 @@ exports.Prisma.PatientScalarFieldEnum = {
   dateOfBirth: 'dateOfBirth',
   fiscalCode: 'fiscalCode',
   address: 'address',
+  houseNumber: 'houseNumber',
   city: 'city',
   postalCode: 'postalCode',
-  phone: 'phone',
-  email: 'email',
+  phone1: 'phone1',
+  phone2: 'phone2',
+  assistanceType: 'assistanceType',
+  exemptionCode: 'exemptionCode',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -207,7 +210,14 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.AssistanceType = exports.$Enums.AssistanceType = {
+  ADI: 'ADI',
+  ADP: 'ADP',
+  CURE_PALLIATIVE: 'CURE_PALLIATIVE',
+  DIMISSIONE_PROTETTA: 'DIMISSIONE_PROTETTA',
+  RIABILITAZIONE: 'RIABILITAZIONE',
+  PRESTAZIONI_INFERMIERISTICHE: 'PRESTAZIONI_INFERMIERISTICHE'
+};
 
 exports.Prisma.ModelName = {
   Post: 'Post',

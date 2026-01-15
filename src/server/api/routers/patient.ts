@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { AssistanceType } from "generated/prisma";
 
 export const patientRouter = createTRPCRouter({
   /**
@@ -13,10 +14,13 @@ export const patientRouter = createTRPCRouter({
         dateOfBirth: z.date().optional(),
         fiscalCode: z.string().length(16).optional(),
         address: z.string().max(200).optional(),
+        houseNumber: z.string().max(5).optional(),
         city: z.string().max(100).optional(),
         postalCode: z.string().max(10).optional(),
-        phone: z.string().max(20).optional(),
-        email: z.string().email().optional(),
+        phone1: z.string().max(50),
+        phone2: z.string().max(50).optional(),
+        assistanceType: z.nativeEnum(AssistanceType).optional(),
+        exemptionCode: z.string().max(10),
         notes: z.string().optional(),
       })
     )
@@ -54,10 +58,13 @@ export const patientRouter = createTRPCRouter({
         dateOfBirth: z.date().optional(),
         fiscalCode: z.string().length(16).optional(),
         address: z.string().max(200).optional(),
+        houseNumber: z.string().max(5).optional(),
         city: z.string().max(100).optional(),
         postalCode: z.string().max(10).optional(),
-        phone: z.string().max(20).optional(),
-        email: z.string().email().optional(),
+        phone1: z.string().max(50),
+        phone2: z.string().max(50).optional(),
+        assistanceType: z.nativeEnum(AssistanceType).optional(),
+        exemptionCode: z.string().max(10),
         notes: z.string().optional(),
       })
     )
@@ -165,7 +172,7 @@ export const patientRouter = createTRPCRouter({
               { firstName: { contains: search } },
               { lastName: { contains: search } },
               { fiscalCode: { contains: search } },
-              { phone: { contains: search } },
+              { phone1: { contains: search } },
             ],
           }
         : {};
@@ -225,7 +232,7 @@ export const patientRouter = createTRPCRouter({
           lastName: true,
           fiscalCode: true,
           dateOfBirth: true,
-          phone: true,
+          phone1: true,
         },
       });
 

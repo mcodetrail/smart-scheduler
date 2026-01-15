@@ -75,20 +75,32 @@ model User {
   lastModifiedAppointments Appointment[] @relation("LastModifiedAppointments")
 }
 
+enum AssistanceType {
+  ADI // Assistenza Domiciliare Integrata
+  ADP // Assistenza Domiciliare Programmata
+  CURE_PALLIATIVE
+  DIMISSIONE_PROTETTA
+  RIABILITAZIONE
+  PRESTAZIONI_INFERMIERISTICHE
+}
+
 model Patient {
-  id          String    @id @default(cuid())
-  firstName   String
-  lastName    String
-  dateOfBirth DateTime?
-  fiscalCode  String?   @unique // Codice Fiscale
-  address     String?
-  city        String?
-  postalCode  String?
-  phone       String?
-  email       String?
-  notes       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id             String          @id @default(cuid())
+  firstName      String
+  lastName       String
+  dateOfBirth    DateTime?
+  fiscalCode     String?         @unique // Codice Fiscale
+  address        String?
+  houseNumber    String? // Numero civico
+  city           String?
+  postalCode     String?
+  phone1         String // Telefono principale (obbligatorio)
+  phone2         String? // Telefono secondario
+  assistanceType AssistanceType? // Tipo di assistenza
+  exemptionCode  String // Codice esenzione
+  notes          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 
   createdBy   User   @relation(fields: [createdById], references: [id])
   createdById String
@@ -97,6 +109,7 @@ model Patient {
 
   @@index([lastName, firstName])
   @@index([fiscalCode])
+  @@index([phone1])
 }
 
 model Appointment {
