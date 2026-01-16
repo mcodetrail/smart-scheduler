@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
@@ -13,7 +13,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>("today");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchDate, setSearchDate] = useState("");
-  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -43,8 +43,8 @@ export default function DashboardPage() {
   });
 
   const searchPatients = api.patient.search.useQuery(
-    { query: searchQuery },
-    { enabled: showSearchResults && searchQuery.length > 0 },
+    { query: debouncedQuery },
+    { enabled: debouncedQuery.length > 0 },
   );
 
   const dateSearchVisits = api.scheduledVisit.getByDateRange.useQuery(
@@ -56,6 +56,19 @@ export default function DashboardPage() {
     },
     { enabled: activeTab === "search" && searchDate.length > 0 },
   );
+
+  // Debounce search query to avoid firing on every keystroke
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedQuery(searchQuery.trim());
+    }, 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+
+  // Automatically show search results when debouncedQuery is set
+  useEffect(() => {
+    // no-op: we rely directly on debouncedQuery presence
+  }, [debouncedQuery]);
 
   const handleRowClick = (patientId: string) => {
     router.push(`/dashboard/patients/${patientId}`);
@@ -72,7 +85,7 @@ export default function DashboardPage() {
       case "search":
         if (searchDate) {
           return dateSearchVisits;
-        } else if (showSearchResults && searchQuery) {
+        } else if (debouncedQuery) {
           return searchPatients;
         }
         return { data: [], isLoading: false, error: null };
@@ -345,7 +358,7 @@ export default function DashboardPage() {
               </Link>
               <button
                 onClick={() => signOut({ callbackUrl: "/auth/signin" })}
-                className="rounded-lg border border-gray-300 bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white transition-all cursor-pointer"
+                className="cursor-pointer rounded-lg border border-gray-300 bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-white"
               >
                 Esci
               </button>
@@ -436,13 +449,7 @@ export default function DashboardPage() {
                     placeholder="Nome, Cognome, Codice Fiscale o Telefono"
                     className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   />
-                  <button
-                    onClick={() => setShowSearchResults(true)}
-                    disabled={!searchQuery}
-                    className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    Cerca
-                  </button>
+                  {/* live search: button removed */}
                 </div>
               </div>
 
@@ -458,7 +465,6 @@ export default function DashboardPage() {
                     onChange={(e) => {
                       setSearchDate(e.target.value);
                       setSearchQuery("");
-                      setShowSearchResults(false);
                     }}
                     className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   />
@@ -492,7 +498,7 @@ export default function DashboardPage() {
               "Nessuna visita programmata per questa data",
             )}
           </div>
-        ) : activeTab === "search" && showSearchResults ? (
+        ) : activeTab === "search" && debouncedQuery ? (
           /* Patient search results */
           <div className="overflow-hidden rounded-lg bg-white shadow">
             {currentData.isLoading ? (
