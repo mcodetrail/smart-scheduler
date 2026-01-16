@@ -144,9 +144,9 @@ export const scheduledVisitRouter = createTRPCRouter({
         patientId: z.string(),
         assistanceType: z.nativeEnum(AssistanceType),
         nextVisitDate: z.date(),
-        visitFrequency: z.number().int().positive().optional(),
-        notes: z.string().optional(),
-        assignedToId: z.string().optional(),
+        visitFrequency: z.number().int().positive().optional().nullable(),
+        notes: z.string().optional().nullable(),
+        assignedToId: z.string().optional().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

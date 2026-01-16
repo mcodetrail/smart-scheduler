@@ -24,6 +24,7 @@ export default function EditPatientPage({
   const { id } = use(params);
   const router = useRouter();
   const { data: session } = useSession();
+  const utils = api.useUtils();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -95,7 +96,8 @@ export default function EditPatientPage({
   }, [scheduledVisitsQuery.data, session?.user?.id]);
 
   const updatePatient = api.patient.update.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      await utils.patient.getById.invalidate({ id });
       router.push("/dashboard");
       router.refresh();
     },
@@ -104,9 +106,21 @@ export default function EditPatientPage({
     },
   });
 
-  const createScheduledVisit = api.scheduledVisit.create.useMutation();
-  const updateScheduledVisit = api.scheduledVisit.update.useMutation();
-  const deleteScheduledVisit = api.scheduledVisit.delete.useMutation();
+  const createScheduledVisit = api.scheduledVisit.create.useMutation({
+    onSuccess: async () => {
+      await utils.scheduledVisit.getByPatient.invalidate({ patientId: id });
+    },
+  });
+  const updateScheduledVisit = api.scheduledVisit.update.useMutation({
+    onSuccess: async () => {
+      await utils.scheduledVisit.getByPatient.invalidate({ patientId: id });
+    },
+  });
+  const deleteScheduledVisit = api.scheduledVisit.delete.useMutation({
+    onSuccess: async () => {
+      await utils.scheduledVisit.getByPatient.invalidate({ patientId: id });
+    },
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -216,9 +230,9 @@ export default function EditPatientPage({
             nextVisitDate: new Date(visit.nextVisitDate),
             visitFrequency: visit.visitFrequency
               ? parseInt(visit.visitFrequency)
-              : null,
-            notes: visit.notes || null,
-            assignedToId: visit.assignedToId || null,
+              : undefined,
+            notes: visit.notes || undefined,
+            assignedToId: visit.assignedToId || undefined,
           });
         }
       }
