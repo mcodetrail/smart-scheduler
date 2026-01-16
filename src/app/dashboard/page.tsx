@@ -47,13 +47,10 @@ export default function DashboardPage() {
     { enabled: showSearchResults && searchQuery.length > 0 },
   );
 
-  const dateSearchPatients = api.patient.getByVisitDate.useQuery(
-    {
-      startDate: searchDate ? new Date(searchDate) : today,
-      endDate: searchDate
-        ? new Date(new Date(searchDate).getTime() + 24 * 60 * 60 * 1000 - 1)
-        : today,
-    },
+  // For date search, get ALL patients to calculate visits based on weeklyPattern
+  // weeklyPattern is recurring forever, so we need all patients regardless of nextVisitDate
+  const allPatientsForDateSearch = api.patient.getAll.useQuery(
+    { limit: 100 },
     { enabled: activeTab === "search" && searchDate.length > 0 },
   );
 
@@ -71,7 +68,12 @@ export default function DashboardPage() {
         return weekPatients;
       case "search":
         if (searchDate) {
-          return dateSearchPatients;
+          // For date search, extract patients array from paginated response
+          return {
+            data: allPatientsForDateSearch.data?.patients ?? [],
+            isLoading: allPatientsForDateSearch.isLoading,
+            error: allPatientsForDateSearch.error,
+          };
         } else if (showSearchResults && searchQuery) {
           return searchPatients;
         }
@@ -157,14 +159,14 @@ export default function DashboardPage() {
     } else if (
       activeTab === "search" &&
       searchDate &&
-      dateSearchPatients.data
+      allPatientsForDateSearch.data?.patients
     ) {
       const searchDateStart = new Date(searchDate);
       searchDateStart.setHours(0, 0, 0, 0);
       const searchDateEnd = new Date(searchDate);
       searchDateEnd.setHours(23, 59, 59, 999);
       return groupPatientsByDate(
-        dateSearchPatients.data,
+        allPatientsForDateSearch.data.patients,
         searchDateStart,
         searchDateEnd,
       );
@@ -505,9 +507,9 @@ export default function DashboardPage() {
           /* Grouped by date view for date search */
           <div className="space-y-6">
             {renderGroupedByDateView(
-              dateSearchPatients.isLoading,
-              dateSearchPatients.error,
-              dateSearchPatients.data,
+              currentData.isLoading,
+              currentData.error,
+              currentData.data,
               "Nessuna visita programmata per questa data",
             )}
           </div>

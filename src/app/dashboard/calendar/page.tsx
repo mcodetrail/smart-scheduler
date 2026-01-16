@@ -13,7 +13,6 @@ export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState<CalendarView>("week");
   const [selectedNurse, setSelectedNurse] = useState<string | undefined>();
-  const [showNewAppointmentModal, setShowNewAppointmentModal] = useState(false);
 
   // Calculate date range based on view
   const dateRange = useMemo(() => {
