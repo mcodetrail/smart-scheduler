@@ -153,7 +153,7 @@ export default function NewPatientPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-gradient-to-r from-indigo-600 to-indigo-700 shadow-lg">
+      <header className="border-b bg-linear-to-r from-indigo-600 to-indigo-700 shadow-lg">
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>

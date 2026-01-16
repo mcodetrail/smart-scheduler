@@ -81,6 +81,14 @@ export default function DashboardPage() {
 
   const currentData = getCurrentData();
 
+  // Helper: format a Date (or date string) to local YYYY-MM-DD key
+  const formatDateKey = (value: Date | string) => {
+    const d = new Date(value);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+      d.getDate(),
+    ).padStart(2, "0")}`;
+  };
+
   // Group scheduled visits by date
   const groupVisitsByDate = (
     visits: any[] | undefined,
@@ -90,9 +98,7 @@ export default function DashboardPage() {
     const groups: Record<string, any[]> = {};
 
     visits.forEach((visit) => {
-      const dateKey = new Date(visit.nextVisitDate)
-        .toISOString()
-        .split("T")[0]!;
+      const dateKey = formatDateKey(visit.nextVisitDate);
       if (!groups[dateKey]) {
         groups[dateKey] = [];
       }
@@ -286,9 +292,11 @@ export default function DashboardPage() {
     return Object.entries(visitsByDate)
       .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
       .map(([dateKey, visits]) => {
-        const date = new Date(dateKey);
-        const isToday = dateKey === today.toISOString().split("T")[0];
-        const isTomorrow = dateKey === tomorrow.toISOString().split("T")[0];
+        // build a Date from the local YYYY-MM-DD key
+        const [y, m, d] = dateKey.split("-").map((s) => parseInt(s, 10));
+        const date = new Date(y!, m! - 1, d);
+        const isToday = dateKey === formatDateKey(today);
+        const isTomorrow = dateKey === formatDateKey(tomorrow);
 
         let dateLabel = date.toLocaleDateString("it-IT", {
           weekday: "long",
@@ -322,22 +330,22 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white shadow-sm">
+      <header className="border-b bg-linear-to-r from-indigo-600 to-indigo-700 shadow-lg">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-white">
               Visite da Effettuare
             </h1>
             <div className="flex items-center gap-4">
               <Link
                 href="/dashboard/patients/new"
-                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+                className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20"
               >
                 + Nuovo Paziente
               </Link>
               <button
                 onClick={() => signOut({ callbackUrl: "/auth/signin" })}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-gray-300 bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white transition-all cursor-pointer"
               >
                 Esci
               </button>
