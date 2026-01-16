@@ -167,7 +167,10 @@ export default function EditPatientPage({
       return;
     }
 
-    if (formData.fiscalCode && formData.fiscalCode.trim().length !== 16) {
+    if (
+      formData.fiscalCode.trim() &&
+      formData.fiscalCode.trim().length !== 16
+    ) {
       alert("Il codice fiscale deve essere di 16 caratteri");
       return;
     }
@@ -177,19 +180,17 @@ export default function EditPatientPage({
       id,
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
-      dateOfBirth: formData.dateOfBirth
-        ? new Date(formData.dateOfBirth)
-        : undefined,
-      fiscalCode: formData.fiscalCode.trim() || undefined,
-      address: formData.address.trim() || undefined,
-      houseNumber: formData.houseNumber.trim() || undefined,
-      city: formData.city.trim() || undefined,
-      postalCode: formData.postalCode.trim() || undefined,
+      dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth) : null,
+      fiscalCode: formData.fiscalCode.trim() || null,
+      address: formData.address.trim() || null,
+      houseNumber: formData.houseNumber.trim() || null,
+      city: formData.city.trim() || null,
+      postalCode: formData.postalCode.trim() || null,
       phone1: formData.phone1.trim(),
-      phone2: formData.phone2.trim() || undefined,
+      phone2: formData.phone2.trim() || null,
       exemptionCode: formData.exemptionCode.trim(),
-      assignedToId: formData.assignedToId || undefined,
-      notes: formData.notes.trim() || undefined,
+      assignedToId: formData.assignedToId || null,
+      notes: formData.notes.trim() || null,
     });
 
     // Update or create scheduled visits
@@ -203,9 +204,9 @@ export default function EditPatientPage({
             nextVisitDate: new Date(visit.nextVisitDate),
             visitFrequency: visit.visitFrequency
               ? parseInt(visit.visitFrequency)
-              : undefined,
-            notes: visit.notes || undefined,
-            assignedToId: visit.assignedToId || undefined,
+              : null,
+            notes: visit.notes || null,
+            assignedToId: visit.assignedToId || null,
           });
         } else {
           // Create new visit
@@ -215,9 +216,9 @@ export default function EditPatientPage({
             nextVisitDate: new Date(visit.nextVisitDate),
             visitFrequency: visit.visitFrequency
               ? parseInt(visit.visitFrequency)
-              : undefined,
-            notes: visit.notes || undefined,
-            assignedToId: visit.assignedToId || undefined,
+              : null,
+            notes: visit.notes || null,
+            assignedToId: visit.assignedToId || null,
           });
         }
       }
@@ -242,17 +243,35 @@ export default function EditPatientPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white shadow-sm">
-        <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
+      <header className="border-b bg-gradient-to-r from-indigo-600 to-indigo-700 shadow-lg">
+        <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Modifica Paziente
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                Modifica Paziente
+              </h1>
+              <p className="mt-1 text-sm text-indigo-100">
+                {patientQuery.data?.firstName} {patientQuery.data?.lastName}
+              </p>
+            </div>
             <Link
               href="/dashboard"
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20"
             >
-              ← Torna alla dashboard
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+              Dashboard
             </Link>
           </div>
         </div>
@@ -326,6 +345,7 @@ export default function EditPatientPage({
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={handleChange}
+                  max={new Date().toISOString().split("T")[0]}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   disabled={updatePatient.isPending}
                 />
@@ -412,6 +432,39 @@ export default function EditPatientPage({
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   disabled={updatePatient.isPending}
                 />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="assignedToId"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Infermiere Assegnato al Paziente
+                </label>
+                <select
+                  id="assignedToId"
+                  name="assignedToId"
+                  value={formData.assignedToId}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  disabled={updatePatient.isPending}
+                >
+                  <option value="">Nessun infermiere assegnato</option>
+                  {nursesQuery.data?.map((nurse) => (
+                    <option key={nurse.id} value={nurse.id}>
+                      {nurse.name || nurse.username}
+                    </option>
+                  ))}
+                </select>
+                {patientQuery.data?.lastAssignedBy && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    Ultimo cambio da{" "}
+                    {patientQuery.data.lastAssignedBy.name ||
+                      patientQuery.data.lastAssignedBy.username}
+                    {patientQuery.data.lastAssignedAt &&
+                      ` il ${new Date(patientQuery.data.lastAssignedAt).toLocaleDateString("it-IT")}`}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -573,6 +626,7 @@ export default function EditPatientPage({
                           e.target.value,
                         )
                       }
+                      min={new Date().toISOString().split("T")[0]}
                       className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>

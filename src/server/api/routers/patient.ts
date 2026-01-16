@@ -138,6 +138,20 @@ export const patientRouter = createTRPCRouter({
               username: true,
             },
           },
+          assignedTo: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+            },
+          },
+          lastAssignedBy: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+            },
+          },
         },
       });
 

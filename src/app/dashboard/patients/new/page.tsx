@@ -53,9 +53,9 @@ export default function NewPatientPage() {
               nextVisitDate: new Date(visit.nextVisitDate),
               visitFrequency: visit.visitFrequency
                 ? parseInt(visit.visitFrequency)
-                : undefined,
-              notes: visit.notes || undefined,
-              assignedToId: visit.assignedToId || undefined,
+                : null,
+              notes: visit.notes || null,
+              assignedToId: visit.assignedToId || null,
             });
           }
         }
@@ -88,7 +88,10 @@ export default function NewPatientPage() {
       return;
     }
 
-    if (formData.fiscalCode && formData.fiscalCode.trim().length !== 16) {
+    if (
+      formData.fiscalCode.trim() &&
+      formData.fiscalCode.trim().length !== 16
+    ) {
       alert("Il codice fiscale deve essere di 16 caratteri");
       return;
     }
@@ -150,15 +153,33 @@ export default function NewPatientPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white shadow-sm">
-        <div className="mx-auto max-w-4xl px-4 py-4 sm:px-6 lg:px-8">
+      <header className="border-b bg-gradient-to-r from-indigo-600 to-indigo-700 shadow-lg">
+        <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Nuovo Paziente</h1>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Nuovo Paziente</h1>
+              <p className="mt-1 text-sm text-indigo-100">
+                Aggiungi un nuovo paziente al sistema
+              </p>
+            </div>
             <Link
               href="/dashboard"
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20"
             >
-              ← Torna alla dashboard
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+              Dashboard
             </Link>
           </div>
         </div>
@@ -231,6 +252,7 @@ export default function NewPatientPage() {
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={handleChange}
+                  max={new Date().toISOString().split("T")[0]}
                   className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   disabled={createPatient.isPending}
                 />
@@ -453,6 +475,7 @@ export default function NewPatientPage() {
                   onChange={(e) =>
                     handleVisitChange(index, "nextVisitDate", e.target.value)
                   }
+                  min={new Date().toISOString().split("T")[0]}
                   className="mb-2 block w-full rounded border p-2"
                 />
                 <input
