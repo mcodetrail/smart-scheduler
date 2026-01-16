@@ -6,13 +6,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
-type Tab = "today" | "tomorrow" | "week" | "search";
+type Tab = "today" | "tomorrow" | "week" | "date" | "search";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("today");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchDate, setSearchDate] = useState("");
+  const [searchDateStart, setSearchDateStart] = useState("");
+  const [searchDateEnd, setSearchDateEnd] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
   const today = new Date();
@@ -49,12 +51,16 @@ export default function DashboardPage() {
 
   const dateSearchVisits = api.scheduledVisit.getByDateRange.useQuery(
     {
-      startDate: searchDate ? new Date(searchDate) : today,
-      endDate: searchDate
-        ? new Date(new Date(searchDate).getTime() + 24 * 60 * 60 * 1000 - 1)
-        : today,
+      startDate: searchDateStart ? new Date(searchDateStart) : today,
+      endDate: searchDateEnd
+        ? new Date(new Date(searchDateEnd).getTime() + 24 * 60 * 60 * 1000 - 1)
+        : searchDateStart
+          ? new Date(
+              new Date(searchDateStart).getTime() + 24 * 60 * 60 * 1000 - 1,
+            )
+          : today,
     },
-    { enabled: activeTab === "search" && searchDate.length > 0 },
+    { enabled: activeTab === "date" && searchDateStart.length > 0 },
   );
 
   // Debounce search query to avoid firing on every keystroke
@@ -82,12 +88,15 @@ export default function DashboardPage() {
         return tomorrowVisits;
       case "week":
         return weekVisits;
+      case "date":
+        return searchDateStart
+          ? dateSearchVisits
+          : { data: [], isLoading: false, error: null };
       case "search":
-        if (searchDate) {
-          return dateSearchVisits;
-        } else if (debouncedQuery) {
-          return searchPatients;
-        }
+        return debouncedQuery
+          ? searchPatients
+          : { data: [], isLoading: false, error: null };
+      default:
         return { data: [], isLoading: false, error: null };
     }
   };
@@ -125,7 +134,11 @@ export default function DashboardPage() {
   const getGroupedVisits = () => {
     if (activeTab === "week" && weekVisits.data) {
       return groupVisitsByDate(weekVisits.data);
-    } else if (activeTab === "search" && searchDate && dateSearchVisits.data) {
+    } else if (
+      activeTab === "date" &&
+      searchDateStart &&
+      dateSearchVisits.data
+    ) {
       return groupVisitsByDate(dateSearchVisits.data);
     }
     return {};
@@ -417,6 +430,16 @@ export default function DashboardPage() {
               )}
             </button>
             <button
+              onClick={() => setActiveTab("date")}
+              className={`border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap ${
+                activeTab === "date"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+              }`}
+            >
+              Per Data
+            </button>
+            <button
               onClick={() => setActiveTab("search")}
               className={`border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap ${
                 activeTab === "search"
@@ -429,50 +452,72 @@ export default function DashboardPage() {
           </nav>
         </div>
 
-        {/* Search Form */}
+        {/* Patient Search Form */}
         {activeTab === "search" && (
           <div className="mb-6 rounded-lg bg-white p-6 shadow">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {/* Patient Search */}
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  Ricerca Paziente
-                </h3>
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setSearchDate("");
-                    }}
-                    placeholder="Nome, Cognome, Codice Fiscale o Telefono"
-                    className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  />
-                  {/* live search: button removed */}
-                </div>
+            <div>
+              <h3 className="mb-3 text-sm font-semibold text-gray-900">
+                Ricerca Paziente
+              </h3>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setSearchDate("");
+                  }}
+                  placeholder="Nome, Cognome, Codice Fiscale o Telefono"
+                  className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                />
               </div>
+            </div>
+          </div>
+        )}
 
-              {/* Date Search */}
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                  Visite per Data
-                </h3>
-                <div className="space-y-3">
+        {/* Date Search Form */}
+        {activeTab === "date" && (
+          <div className="mb-6 rounded-lg bg-white p-6 shadow">
+            <div>
+              <h3 className="mb-3 text-sm font-semibold text-gray-900">
+                Visite per Periodo
+              </h3>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Data Inizio
+                  </label>
                   <input
                     type="date"
-                    value={searchDate}
+                    value={searchDateStart}
                     onChange={(e) => {
-                      setSearchDate(e.target.value);
+                      setSearchDateStart(e.target.value);
                       setSearchQuery("");
                     }}
                     className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                   />
-                  <p className="text-xs text-gray-500">
-                    Seleziona una data per vedere le visite programmate
-                  </p>
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                    Data Fine (opzionale)
+                  </label>
+                  <input
+                    type="date"
+                    value={searchDateEnd}
+                    onChange={(e) => {
+                      setSearchDateEnd(e.target.value);
+                      setSearchQuery("");
+                    }}
+                    min={searchDateStart}
+                    className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  />
                 </div>
               </div>
+              <p className="mt-3 text-xs text-gray-500">
+                Seleziona un periodo per vedere le visite programmate. Se non
+                specifichi una data fine, verrà mostrato solo il giorno
+                selezionato.
+              </p>
             </div>
           </div>
         )}
@@ -488,17 +533,19 @@ export default function DashboardPage() {
               "Nessuna visita programmata nei prossimi 7 giorni",
             )}
           </div>
-        ) : activeTab === "search" && searchDate ? (
+        ) : activeTab === "date" ? (
           /* Grouped by date view for date search */
           <div className="space-y-6">
             {renderGroupedByDateView(
               currentData.isLoading,
               currentData.error,
               currentData.data,
-              "Nessuna visita programmata per questa data",
+              searchDateStart
+                ? "Nessuna visita programmata per questo periodo"
+                : "Seleziona un periodo per vedere le visite programmate",
             )}
           </div>
-        ) : activeTab === "search" && debouncedQuery ? (
+        ) : activeTab === "search" ? (
           /* Patient search results */
           <div className="overflow-hidden rounded-lg bg-white shadow">
             {currentData.isLoading ? (
@@ -507,7 +554,11 @@ export default function DashboardPage() {
               </div>
             ) : !currentData.data || currentData.data.length === 0 ? (
               <div className="p-8 text-center">
-                <div className="text-gray-500">Nessun paziente trovato</div>
+                <div className="text-gray-500">
+                  {debouncedQuery
+                    ? "Nessun paziente trovato"
+                    : "Digita per cercare un paziente"}
+                </div>
               </div>
             ) : (
               <div className="divide-y divide-gray-200">

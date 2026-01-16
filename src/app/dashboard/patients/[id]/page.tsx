@@ -25,6 +25,9 @@ export default function EditPatientPage({
   const router = useRouter();
   const { data: session } = useSession();
   const utils = api.useUtils();
+  const [formTab, setFormTab] = useState<"anagrafica" | "prestazioni">(
+    "anagrafica",
+  );
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -292,6 +295,34 @@ export default function EditPatientPage({
       </header>
 
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Tab Navigation */}
+        <div className="mb-6 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              type="button"
+              onClick={() => setFormTab("anagrafica")}
+              className={`border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap ${
+                formTab === "anagrafica"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+              }`}
+            >
+              Dati Anagrafici
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormTab("prestazioni")}
+              className={`border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap ${
+                formTab === "prestazioni"
+                  ? "border-indigo-500 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+              }`}
+            >
+              Prestazioni
+            </button>
+          </nav>
+        </div>
+
         <form
           onSubmit={handleSubmit}
           className="space-y-8 rounded-lg bg-white p-6 shadow"
@@ -302,418 +333,435 @@ export default function EditPatientPage({
             </div>
           )}
 
-          {/* Personal Information */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Dati Anagrafici
-            </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {formTab === "anagrafica" && (
+            <>
+              {/* Personal Information */}
               <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Cognome *
-                </label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  required
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Nome *
-                </label>
-                <input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  required
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="dateOfBirth"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Data di Nascita
-                </label>
-                <input
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  type="date"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
-                  max={new Date().toISOString().split("T")[0]}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="fiscalCode"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Codice Fiscale
-                </label>
-                <input
-                  id="fiscalCode"
-                  name="fiscalCode"
-                  type="text"
-                  maxLength={16}
-                  value={formData.fiscalCode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 uppercase shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Information */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Contatti
-            </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="phone1"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Telefono 1 *
-                </label>
-                <input
-                  id="phone1"
-                  name="phone1"
-                  type="tel"
-                  required
-                  value={formData.phone1}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="phone2"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Telefono 2
-                </label>
-                <input
-                  id="phone2"
-                  name="phone2"
-                  type="tel"
-                  value={formData.phone2}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="exemptionCode"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Codice Esenzione *
-                </label>
-                <input
-                  id="exemptionCode"
-                  name="exemptionCode"
-                  type="text"
-                  required
-                  value={formData.exemptionCode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="assignedToId"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Infermiere Assegnato al Paziente
-                </label>
-                <select
-                  id="assignedToId"
-                  name="assignedToId"
-                  value={formData.assignedToId}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                >
-                  <option value="">Nessun infermiere assegnato</option>
-                  {nursesQuery.data?.map((nurse) => (
-                    <option key={nurse.id} value={nurse.id}>
-                      {nurse.name || nurse.username}
-                    </option>
-                  ))}
-                </select>
-                {patientQuery.data?.lastAssignedBy && (
-                  <p className="mt-1 text-xs text-gray-500">
-                    Ultimo cambio da{" "}
-                    {patientQuery.data.lastAssignedBy.name ||
-                      patientQuery.data.lastAssignedBy.username}
-                    {patientQuery.data.lastAssignedAt &&
-                      ` il ${new Date(patientQuery.data.lastAssignedAt).toLocaleDateString("it-IT")}`}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Address */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Indirizzo
-            </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="address"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Via
-                </label>
-                <input
-                  id="address"
-                  name="address"
-                  type="text"
-                  value={formData.address}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="houseNumber"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Civico
-                </label>
-                <input
-                  id="houseNumber"
-                  name="houseNumber"
-                  type="text"
-                  value={formData.houseNumber}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="city"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Città
-                </label>
-                <input
-                  id="city"
-                  name="city"
-                  type="text"
-                  value={formData.city}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="postalCode"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  CAP
-                </label>
-                <input
-                  id="postalCode"
-                  name="postalCode"
-                  type="text"
-                  value={formData.postalCode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Patient Notes */}
-          <div>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Note sul Paziente
-            </h2>
-            <textarea
-              id="notes"
-              name="notes"
-              rows={4}
-              value={formData.notes}
-              onChange={handleChange}
-              placeholder="Note generali sul paziente..."
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              disabled={updatePatient.isPending}
-            />
-          </div>
-
-          {/* Scheduled Visits */}
-          <div>
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Prestazioni Pianificate
-              </h2>
-              <button
-                type="button"
-                onClick={handleAddVisit}
-                className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700"
-                disabled={updatePatient.isPending}
-              >
-                + Aggiungi
-              </button>
-            </div>
-            {scheduledVisits.map((visit, index) => (
-              <div key={index} className="mb-4 rounded-lg border bg-white p-4">
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <h2 className="mb-4 text-lg font-semibold text-gray-900">
+                  Dati Anagrafici
+                </h2>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                      Tipo Assistenza *
-                    </label>
-                    <select
-                      value={visit.assistanceType}
-                      onChange={(e) =>
-                        handleVisitChange(
-                          index,
-                          "assistanceType",
-                          e.target.value,
-                        )
-                      }
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                    <label
+                      htmlFor="lastName"
+                      className="block text-sm font-medium text-gray-700"
                     >
-                      <option value="">Seleziona...</option>
-                      <option value="ADI">ADI</option>
-                      <option value="ADP">ADP</option>
-                      <option value="CURE_PALLIATIVE">Cure Palliative</option>
-                      <option value="DIMISSIONE_PROTETTA">
-                        Dimissione Protetta
-                      </option>
-                      <option value="RIABILITAZIONE">Riabilitazione</option>
-                      <option value="PRESTAZIONI_INFERMIERISTICHE">
-                        Prestazioni Infermieristiche
-                      </option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                      Data Prossima Visita *
+                      Cognome *
                     </label>
                     <input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      required
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="firstName"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Nome *
+                    </label>
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      type="text"
+                      required
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="dateOfBirth"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Data di Nascita
+                    </label>
+                    <input
+                      id="dateOfBirth"
+                      name="dateOfBirth"
                       type="date"
-                      value={visit.nextVisitDate}
-                      onChange={(e) =>
-                        handleVisitChange(
-                          index,
-                          "nextVisitDate",
-                          e.target.value,
-                        )
-                      }
-                      min={new Date().toISOString().split("T")[0]}
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                      value={formData.dateOfBirth}
+                      onChange={handleChange}
+                      max={new Date().toISOString().split("T")[0]}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
                     />
                   </div>
+
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                      Cadenza (giorni)
+                    <label
+                      htmlFor="fiscalCode"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Codice Fiscale
                     </label>
                     <input
-                      type="number"
-                      placeholder="Es: 7 per settimanale"
-                      value={visit.visitFrequency}
-                      onChange={(e) =>
-                        handleVisitChange(
-                          index,
-                          "visitFrequency",
-                          e.target.value,
-                        )
-                      }
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                      id="fiscalCode"
+                      name="fiscalCode"
+                      type="text"
+                      maxLength={16}
+                      value={formData.fiscalCode}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 uppercase shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
                     />
                   </div>
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div>
+                <h2 className="mb-4 text-lg font-semibold text-gray-900">
+                  Contatti
+                </h2>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                      Infermiere Assegnato
+                    <label
+                      htmlFor="phone1"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Telefono 1 *
+                    </label>
+                    <input
+                      id="phone1"
+                      name="phone1"
+                      type="tel"
+                      required
+                      value={formData.phone1}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="phone2"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Telefono 2
+                    </label>
+                    <input
+                      id="phone2"
+                      name="phone2"
+                      type="tel"
+                      value={formData.phone2}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="exemptionCode"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Codice Esenzione *
+                    </label>
+                    <input
+                      id="exemptionCode"
+                      name="exemptionCode"
+                      type="text"
+                      required
+                      value={formData.exemptionCode}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="assignedToId"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Infermiere Assegnato al Paziente
                     </label>
                     <select
-                      value={visit.assignedToId}
-                      onChange={(e) =>
-                        handleVisitChange(index, "assignedToId", e.target.value)
-                      }
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                      id="assignedToId"
+                      name="assignedToId"
+                      value={formData.assignedToId}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
                     >
-                      <option value="">Seleziona infermiere...</option>
+                      <option value="">Nessun infermiere assegnato</option>
                       {nursesQuery.data?.map((nurse) => (
                         <option key={nurse.id} value={nurse.id}>
                           {nurse.name || nurse.username}
                         </option>
                       ))}
                     </select>
+                    {patientQuery.data?.lastAssignedBy && (
+                      <p className="mt-1 text-xs text-gray-500">
+                        Ultimo cambio da{" "}
+                        {patientQuery.data.lastAssignedBy.name ||
+                          patientQuery.data.lastAssignedBy.username}
+                        {patientQuery.data.lastAssignedAt &&
+                          ` il ${new Date(patientQuery.data.lastAssignedAt).toLocaleDateString("it-IT")}`}
+                      </p>
+                    )}
                   </div>
-                  <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                      Note Prestazione
+                </div>
+              </div>
+
+              {/* Address */}
+              <div>
+                <h2 className="mb-4 text-lg font-semibold text-gray-900">
+                  Indirizzo
+                </h2>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Via
                     </label>
-                    <textarea
-                      placeholder="Note specifiche per questa prestazione..."
-                      value={visit.notes}
-                      onChange={(e) =>
-                        handleVisitChange(index, "notes", e.target.value)
-                      }
-                      rows={2}
-                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                    <input
+                      id="address"
+                      name="address"
+                      type="text"
+                      value={formData.address}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="houseNumber"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Civico
+                    </label>
+                    <input
+                      id="houseNumber"
+                      name="houseNumber"
+                      type="text"
+                      value={formData.houseNumber}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="city"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Città
+                    </label>
+                    <input
+                      id="city"
+                      name="city"
+                      type="text"
+                      value={formData.city}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="postalCode"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      CAP
+                    </label>
+                    <input
+                      id="postalCode"
+                      name="postalCode"
+                      type="text"
+                      value={formData.postalCode}
+                      onChange={handleChange}
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                      disabled={updatePatient.isPending}
                     />
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveVisit(index)}
-                  className="mt-3 text-sm font-medium text-red-600 hover:text-red-700"
-                >
-                  🗑️ Rimuovi prestazione
-                </button>
               </div>
-            ))}
-            {scheduledVisits.length === 0 && (
-              <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center">
-                <p className="text-gray-500">
-                  Nessuna prestazione pianificata. Clicca &quot;+ Aggiungi&quot;
-                  per aggiungerne una.
-                </p>
+
+              {/* Patient Notes */}
+              <div>
+                <h2 className="mb-4 text-lg font-semibold text-gray-900">
+                  Note sul Paziente
+                </h2>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  rows={4}
+                  value={formData.notes}
+                  onChange={handleChange}
+                  placeholder="Note generali sul paziente..."
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  disabled={updatePatient.isPending}
+                />
               </div>
-            )}
-          </div>
+            </>
+          )}
+
+          {formTab === "prestazioni" && (
+            <>
+              {/* Scheduled Visits */}
+              <div>
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Prestazioni Pianificate
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={handleAddVisit}
+                    className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700"
+                    disabled={updatePatient.isPending}
+                  >
+                    + Aggiungi
+                  </button>
+                </div>
+                {scheduledVisits.map((visit, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 rounded-lg border bg-white p-4"
+                  >
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          Tipo Assistenza *
+                        </label>
+                        <select
+                          value={visit.assistanceType}
+                          onChange={(e) =>
+                            handleVisitChange(
+                              index,
+                              "assistanceType",
+                              e.target.value,
+                            )
+                          }
+                          className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                        >
+                          <option value="">Seleziona...</option>
+                          <option value="ADI">ADI</option>
+                          <option value="ADP">ADP</option>
+                          <option value="CURE_PALLIATIVE">
+                            Cure Palliative
+                          </option>
+                          <option value="DIMISSIONE_PROTETTA">
+                            Dimissione Protetta
+                          </option>
+                          <option value="RIABILITAZIONE">Riabilitazione</option>
+                          <option value="PRESTAZIONI_INFERMIERISTICHE">
+                            Prestazioni Infermieristiche
+                          </option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          Data Prossima Visita *
+                        </label>
+                        <input
+                          type="date"
+                          value={visit.nextVisitDate}
+                          onChange={(e) =>
+                            handleVisitChange(
+                              index,
+                              "nextVisitDate",
+                              e.target.value,
+                            )
+                          }
+                          min={new Date().toISOString().split("T")[0]}
+                          className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          Cadenza (giorni)
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Es: 7 per settimanale"
+                          value={visit.visitFrequency}
+                          onChange={(e) =>
+                            handleVisitChange(
+                              index,
+                              "visitFrequency",
+                              e.target.value,
+                            )
+                          }
+                          className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          Infermiere Assegnato
+                        </label>
+                        <select
+                          value={visit.assignedToId}
+                          onChange={(e) =>
+                            handleVisitChange(
+                              index,
+                              "assignedToId",
+                              e.target.value,
+                            )
+                          }
+                          className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                        >
+                          <option value="">Seleziona infermiere...</option>
+                          {nursesQuery.data?.map((nurse) => (
+                            <option key={nurse.id} value={nurse.id}>
+                              {nurse.name || nurse.username}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="mb-1 block text-sm font-medium text-gray-700">
+                          Note Prestazione
+                        </label>
+                        <textarea
+                          placeholder="Note specifiche per questa prestazione..."
+                          value={visit.notes}
+                          onChange={(e) =>
+                            handleVisitChange(index, "notes", e.target.value)
+                          }
+                          rows={2}
+                          className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveVisit(index)}
+                      className="mt-3 text-sm font-medium text-red-600 hover:text-red-700"
+                    >
+                      🗑️ Rimuovi prestazione
+                    </button>
+                  </div>
+                ))}
+                {scheduledVisits.length === 0 && (
+                  <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center">
+                    <p className="text-gray-500">
+                      Nessuna prestazione pianificata. Clicca &quot;+
+                      Aggiungi&quot; per aggiungerne una.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
 
           <div className="flex justify-end gap-4">
             <Link
