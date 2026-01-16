@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { AssistanceType } from "generated/prisma";
 
 export const patientRouter = createTRPCRouter({
   /**
@@ -19,13 +18,10 @@ export const patientRouter = createTRPCRouter({
         postalCode: z.string().max(10).optional(),
         phone1: z.string().max(50),
         phone2: z.string().max(50).optional(),
-        assistanceType: z.nativeEnum(AssistanceType).optional(),
         exemptionCode: z.string().max(10),
-        nextVisitDate: z.date().optional(),
-        weeklyPattern: z.string().optional(),
         assignedToId: z.string().optional(),
         notes: z.string().optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       // Check if fiscal code already exists
@@ -59,23 +55,20 @@ export const patientRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        firstName: z.string().min(2).max(100),
-        lastName: z.string().min(2).max(100),
-        dateOfBirth: z.date().optional(),
-        fiscalCode: z.string().length(16).optional(),
-        address: z.string().max(200).optional(),
-        houseNumber: z.string().max(5).optional(),
-        city: z.string().max(100).optional(),
-        postalCode: z.string().max(10).optional(),
-        phone1: z.string().max(50),
-        phone2: z.string().max(50).optional(),
-        assistanceType: z.nativeEnum(AssistanceType).optional(),
-        exemptionCode: z.string().max(10),
-        nextVisitDate: z.date().optional(),
-        weeklyPattern: z.string().optional(),
-        assignedToId: z.string().optional(),
-        notes: z.string().optional(),
-      })
+        firstName: z.string().min(2).max(100).optional(),
+        lastName: z.string().min(2).max(100).optional(),
+        dateOfBirth: z.date().optional().nullable(),
+        fiscalCode: z.string().length(16).optional().nullable(),
+        address: z.string().max(200).optional().nullable(),
+        houseNumber: z.string().max(5).optional().nullable(),
+        city: z.string().max(100).optional().nullable(),
+        postalCode: z.string().max(10).optional().nullable(),
+        phone1: z.string().max(50).optional(),
+        phone2: z.string().max(50).optional().nullable(),
+        exemptionCode: z.string().max(10).optional(),
+        assignedToId: z.string().optional().nullable(),
+        notes: z.string().optional().nullable(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { id, assignedToId, ...data } = input;
@@ -145,26 +138,6 @@ export const patientRouter = createTRPCRouter({
               username: true,
             },
           },
-          appointments: {
-            orderBy: { scheduledDate: "desc" },
-            take: 10,
-            include: {
-              createdBy: {
-                select: {
-                  id: true,
-                  name: true,
-                  username: true,
-                },
-              },
-              lastModifiedBy: {
-                select: {
-                  id: true,
-                  name: true,
-                  username: true,
-                },
-              },
-            },
-          },
         },
       });
 
@@ -213,11 +186,6 @@ export const patientRouter = createTRPCRouter({
               username: true,
             },
           },
-          _count: {
-            select: {
-              appointments: true,
-            },
-          },
         },
       });
 
@@ -260,62 +228,14 @@ export const patientRouter = createTRPCRouter({
           phone1: true,
           phone2: true,
           address: true,
+          houseNumber: true,
           city: true,
-          nextVisitDate: true,
           assignedTo: {
             select: {
               id: true,
               name: true,
             },
           },
-        },
-      });
-
-      return patients;
-    }),
-
-  /**
-   * Get patients by visit date range
-   */
-  getByVisitDate: protectedProcedure
-    .input(
-      z.object({
-        startDate: z.date(),
-        endDate: z.date(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const patients = await ctx.db.patient.findMany({
-        where: {
-          nextVisitDate: {
-            gte: input.startDate,
-            lte: input.endDate,
-          },
-        },
-        orderBy: [{ nextVisitDate: "asc" }, { lastName: "asc" }],
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          address: true,
-          phone1: true,
-          notes: true,
-          nextVisitDate: true,
-          weeklyPattern: true,
-          assignedTo: {
-            select: {
-              id: true,
-              name: true,
-              username: true,
-            },
-          },
-          lastAssignedBy: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          lastAssignedAt: true,
         },
       });
 

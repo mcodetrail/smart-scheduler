@@ -118,14 +118,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.PostScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdById: 'createdById'
-};
-
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -174,10 +166,7 @@ exports.Prisma.PatientScalarFieldEnum = {
   postalCode: 'postalCode',
   phone1: 'phone1',
   phone2: 'phone2',
-  assistanceType: 'assistanceType',
   exemptionCode: 'exemptionCode',
-  nextVisitDate: 'nextVisitDate',
-  weeklyPattern: 'weeklyPattern',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -187,17 +176,29 @@ exports.Prisma.PatientScalarFieldEnum = {
   lastAssignedAt: 'lastAssignedAt'
 };
 
-exports.Prisma.AppointmentScalarFieldEnum = {
+exports.Prisma.ScheduledVisitScalarFieldEnum = {
   id: 'id',
   patientId: 'patientId',
-  scheduledDate: 'scheduledDate',
-  duration: 'duration',
-  status: 'status',
+  assistanceType: 'assistanceType',
+  nextVisitDate: 'nextVisitDate',
+  visitFrequency: 'visitFrequency',
   notes: 'notes',
+  isActive: 'isActive',
+  assignedToId: 'assignedToId',
   createdAt: 'createdAt',
   createdById: 'createdById',
-  lastModifiedAt: 'lastModifiedAt',
-  lastModifiedById: 'lastModifiedById'
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CompletedVisitScalarFieldEnum = {
+  id: 'id',
+  scheduledVisitId: 'scheduledVisitId',
+  patientId: 'patientId',
+  completedDate: 'completedDate',
+  assistanceType: 'assistanceType',
+  notes: 'notes',
+  performedById: 'performedById',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
@@ -225,12 +226,12 @@ exports.AssistanceType = exports.$Enums.AssistanceType = {
 };
 
 exports.Prisma.ModelName = {
-  Post: 'Post',
   Account: 'Account',
   Session: 'Session',
   User: 'User',
   Patient: 'Patient',
-  Appointment: 'Appointment',
+  ScheduledVisit: 'ScheduledVisit',
+  CompletedVisit: 'CompletedVisit',
   VerificationToken: 'VerificationToken'
 };
 

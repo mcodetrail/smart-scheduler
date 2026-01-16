@@ -1,9 +1,20 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { useState, useEffect, use } from "react";
+import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import type { AssistanceType } from "generated/prisma";
+
+type ScheduledVisitInput = {
+  id?: string;
+  assistanceType: AssistanceType | "";
+  nextVisitDate: string;
+  visitFrequency: string;
+  notes: string;
+  assignedToId: string;
+};
 
 export default function EditPatientPage({
   params,
@@ -12,30 +23,9 @@ export default function EditPatientPage({
 }) {
   const { id } = use(params);
   const router = useRouter();
-  const utils = api.useUtils();
-  const { data: patient, isLoading } = api.patient.getById.useQuery({
-    id: id,
-  });
-  const { data: nurses } = api.auth.getAllNurses.useQuery();
+  const { data: session } = useSession();
 
-  const [formData, setFormData] = useState<{
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    fiscalCode: string;
-    address: string;
-    houseNumber: string;
-    city: string;
-    postalCode: string;
-    phone1: string;
-    phone2: string;
-    assistanceType: string;
-    exemptionCode: string;
-    nextVisitDate: string;
-    weeklyPattern: string[];
-    assignedToId: string;
-    notes: string;
-  }>({
+  const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     dateOfBirth: "",
@@ -46,23 +36,32 @@ export default function EditPatientPage({
     postalCode: "",
     phone1: "",
     phone2: "",
-    assistanceType: "",
     exemptionCode: "",
-    nextVisitDate: "",
-    weeklyPattern: [],
-    assignedToId: "",
+    assignedToId: session?.user?.id || "",
     notes: "",
   });
 
+  const [scheduledVisits, setScheduledVisits] = useState<ScheduledVisitInput[]>(
+    [],
+  );
+
+  const patientQuery = api.patient.getById.useQuery({ id });
+  const scheduledVisitsQuery = api.scheduledVisit.getByPatient.useQuery({
+    patientId: id,
+  });
+
+  const nursesQuery = api.auth.getAllNurses.useQuery();
+
+  // Load patient data
   useEffect(() => {
-    if (patient) {
+    if (patientQuery.data) {
+      const patient = patientQuery.data;
       setFormData({
         firstName: patient.firstName,
         lastName: patient.lastName,
-        dateOfBirth:
-          patient.dateOfBirth != null
-            ? new Date(patient.dateOfBirth).toISOString().split("T")[0]!
-            : "",
+        dateOfBirth: patient.dateOfBirth
+          ? new Date(patient.dateOfBirth).toISOString().split("T")[0]!
+          : "",
         fiscalCode: patient.fiscalCode || "",
         address: patient.address || "",
         houseNumber: patient.houseNumber || "",
@@ -70,33 +69,85 @@ export default function EditPatientPage({
         postalCode: patient.postalCode || "",
         phone1: patient.phone1,
         phone2: patient.phone2 || "",
-        assistanceType: patient.assistanceType || "",
         exemptionCode: patient.exemptionCode,
-        nextVisitDate:
-          patient.nextVisitDate != null
-            ? new Date(patient.nextVisitDate).toISOString().split("T")[0]!
-            : "",
-        weeklyPattern: patient.weeklyPattern
-          ? patient.weeklyPattern.split(",")
-          : [],
-        assignedToId: patient.assignedToId || "",
+        assignedToId: patient.assignedToId || session?.user?.id || "",
         notes: patient.notes || "",
       });
     }
-  }, [patient]);
+  }, [patientQuery.data, session?.user?.id]);
+
+  // Load scheduled visits
+  useEffect(() => {
+    if (scheduledVisitsQuery.data) {
+      setScheduledVisits(
+        scheduledVisitsQuery.data.map((visit) => ({
+          id: visit.id,
+          assistanceType: visit.assistanceType,
+          nextVisitDate: new Date(visit.nextVisitDate)
+            .toISOString()
+            .split("T")[0]!,
+          visitFrequency: visit.visitFrequency?.toString() || "",
+          notes: visit.notes || "",
+          assignedToId: visit.assignedToId || session?.user?.id || "",
+        })),
+      );
+    }
+  }, [scheduledVisitsQuery.data, session?.user?.id]);
 
   const updatePatient = api.patient.update.useMutation({
-    onSuccess: async () => {
-      await utils.patient.getByVisitDate.invalidate();
-      await utils.patient.getById.invalidate();
+    onSuccess: () => {
       router.push("/dashboard");
       router.refresh();
     },
     onError: (error) => {
-      console.error("Errore durante l'aggiornamento del paziente:", error);
       alert(`Errore: ${error.message}`);
     },
   });
+
+  const createScheduledVisit = api.scheduledVisit.create.useMutation();
+  const updateScheduledVisit = api.scheduledVisit.update.useMutation();
+  const deleteScheduledVisit = api.scheduledVisit.delete.useMutation();
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddVisit = () => {
+    setScheduledVisits((prev) => [
+      ...prev,
+      {
+        assistanceType: "",
+        nextVisitDate: "",
+        visitFrequency: "",
+        notes: "",
+        assignedToId: session?.user?.id || "",
+      },
+    ]);
+  };
+
+  const handleRemoveVisit = (index: number) => {
+    const visit = scheduledVisits[index];
+    if (visit?.id) {
+      // If visit has an ID, delete from database
+      deleteScheduledVisit.mutate({ id: visit.id });
+    }
+    setScheduledVisits((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleVisitChange = (
+    index: number,
+    field: keyof ScheduledVisitInput,
+    value: string,
+  ) => {
+    setScheduledVisits((prev) =>
+      prev.map((visit, i) =>
+        i === index ? { ...visit, [field]: value } : visit,
+      ),
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,8 +172,9 @@ export default function EditPatientPage({
       return;
     }
 
-    updatePatient.mutate({
-      id: id,
+    // Update patient data
+    await updatePatient.mutateAsync({
+      id,
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       dateOfBirth: formData.dateOfBirth
@@ -135,57 +187,55 @@ export default function EditPatientPage({
       postalCode: formData.postalCode.trim() || undefined,
       phone1: formData.phone1.trim(),
       phone2: formData.phone2.trim() || undefined,
-      assistanceType: (formData.assistanceType.trim() || undefined) as any,
       exemptionCode: formData.exemptionCode.trim(),
-      nextVisitDate: formData.nextVisitDate
-        ? new Date(formData.nextVisitDate)
-        : undefined,
-      weeklyPattern:
-        formData.weeklyPattern.length > 0
-          ? formData.weeklyPattern.join(",")
-          : undefined,
       assignedToId: formData.assignedToId || undefined,
       notes: formData.notes.trim() || undefined,
     });
+
+    // Update or create scheduled visits
+    for (const visit of scheduledVisits) {
+      if (visit.assistanceType && visit.nextVisitDate) {
+        if (visit.id) {
+          // Update existing visit
+          await updateScheduledVisit.mutateAsync({
+            id: visit.id,
+            assistanceType: visit.assistanceType,
+            nextVisitDate: new Date(visit.nextVisitDate),
+            visitFrequency: visit.visitFrequency
+              ? parseInt(visit.visitFrequency)
+              : undefined,
+            notes: visit.notes || undefined,
+            assignedToId: visit.assignedToId || undefined,
+          });
+        } else {
+          // Create new visit
+          await createScheduledVisit.mutateAsync({
+            patientId: id,
+            assistanceType: visit.assistanceType,
+            nextVisitDate: new Date(visit.nextVisitDate),
+            visitFrequency: visit.visitFrequency
+              ? parseInt(visit.visitFrequency)
+              : undefined,
+            notes: visit.notes || undefined,
+            assignedToId: visit.assignedToId || undefined,
+          });
+        }
+      }
+    }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleWeeklyPatternChange = (day: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      weeklyPattern: prev.weeklyPattern.includes(day)
-        ? prev.weeklyPattern.filter((d) => d !== day)
-        : [...prev.weeklyPattern, day].sort(),
-    }));
-  };
-
-  if (isLoading) {
+  if (patientQuery.isLoading || scheduledVisitsQuery.isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-lg">Caricamento...</div>
+      <div className="min-h-screen bg-gray-50 p-8">
+        <div className="text-center">Caricamento...</div>
       </div>
     );
   }
 
-  if (!patient) {
+  if (!patientQuery.data) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-lg">Paziente non trovato</div>
+      <div className="min-h-screen bg-gray-50 p-8">
+        <div className="text-center text-red-600">Paziente non trovato</div>
       </div>
     );
   }
@@ -213,6 +263,12 @@ export default function EditPatientPage({
           onSubmit={handleSubmit}
           className="space-y-8 rounded-lg bg-white p-6 shadow"
         >
+          {updatePatient.error && (
+            <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
+              {updatePatient.error.message}
+            </div>
+          )}
+
           {/* Personal Information */}
           <div>
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
@@ -299,7 +355,71 @@ export default function EditPatientPage({
           {/* Contact Information */}
           <div>
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Indirizzo e Contatti
+              Contatti
+            </h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="phone1"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Telefono 1 *
+                </label>
+                <input
+                  id="phone1"
+                  name="phone1"
+                  type="tel"
+                  required
+                  value={formData.phone1}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  disabled={updatePatient.isPending}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="phone2"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Telefono 2
+                </label>
+                <input
+                  id="phone2"
+                  name="phone2"
+                  type="tel"
+                  value={formData.phone2}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  disabled={updatePatient.isPending}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="exemptionCode"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Codice Esenzione *
+                </label>
+                <input
+                  id="exemptionCode"
+                  name="exemptionCode"
+                  type="text"
+                  required
+                  value={formData.exemptionCode}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  disabled={updatePatient.isPending}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Address */}
+          <div>
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">
+              Indirizzo
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
@@ -307,7 +427,7 @@ export default function EditPatientPage({
                   htmlFor="address"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Indirizzo
+                  Via
                 </label>
                 <input
                   id="address"
@@ -325,7 +445,7 @@ export default function EditPatientPage({
                   htmlFor="houseNumber"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Numero Civico
+                  Civico
                 </label>
                 <input
                   id="houseNumber"
@@ -373,235 +493,171 @@ export default function EditPatientPage({
                   disabled={updatePatient.isPending}
                 />
               </div>
-
-              <div>
-                <label
-                  htmlFor="phone1"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Telefono 1 *
-                </label>
-                <input
-                  id="phone1"
-                  name="phone1"
-                  type="text"
-                  required
-                  value={formData.phone1}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="phone2"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Telefono 2
-                </label>
-                <input
-                  id="phone2"
-                  name="phone2"
-                  type="text"
-                  value={formData.phone2}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
             </div>
           </div>
 
-          {/* Visit Planning */}
+          {/* Patient Notes */}
           <div>
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
-              Pianificazione Visite
+              Note sul Paziente
             </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="nextVisitDate"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Data Prossima Visita
-                </label>
-                <input
-                  id="nextVisitDate"
-                  name="nextVisitDate"
-                  type="date"
-                  value={formData.nextVisitDate}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-            </div>
-
-            {/* Weekly Pattern */}
-            <div className="mt-6">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Giorni della Settimana (Opzionale)
-              </label>
-              <p className="mb-3 text-xs text-gray-500">
-                Seleziona i giorni specifici della settimana per visite
-                ricorrenti. Alternativa alla cadenza in giorni.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { value: "1", label: "Lun", fullLabel: "Lunedì" },
-                  { value: "2", label: "Mar", fullLabel: "Martedì" },
-                  { value: "3", label: "Mer", fullLabel: "Mercoledì" },
-                  { value: "4", label: "Gio", fullLabel: "Giovedì" },
-                  { value: "5", label: "Ven", fullLabel: "Venerdì" },
-                  { value: "6", label: "Sab", fullLabel: "Sabato" },
-                ].map((day) => (
-                  <label
-                    key={day.value}
-                    className={`flex cursor-pointer items-center space-x-2 rounded-lg border px-4 py-2 ${
-                      formData.weeklyPattern.includes(day.value)
-                        ? "border-indigo-500 bg-indigo-50"
-                        : "border-gray-300 bg-white hover:border-indigo-300"
-                    }`}
-                    title={day.fullLabel}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={formData.weeklyPattern.includes(day.value)}
-                      onChange={() => handleWeeklyPatternChange(day.value)}
-                      disabled={updatePatient.isPending}
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                    />
-                    <span className="text-sm font-medium text-gray-700">
-                      {day.label}
-                    </span>
-                  </label>
-                ))}
-                {/* Domenica disabilitata */}
-                <label
-                  className="flex cursor-not-allowed items-center space-x-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 opacity-50"
-                  title="Domenica non disponibile"
-                >
-                  <input
-                    type="checkbox"
-                    checked={false}
-                    disabled={true}
-                    className="h-4 w-4 rounded border-gray-300"
-                  />
-                  <span className="text-sm font-medium text-gray-500">Dom</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="assignedToId"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Assegnato a
-                </label>
-                <select
-                  id="assignedToId"
-                  name="assignedToId"
-                  value={formData.assignedToId}
-                  onChange={handleSelectChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                >
-                  <option value="">Seleziona infermiere</option>
-                  {nurses?.map((nurse) => (
-                    <option key={nurse.id} value={nurse.id}>
-                      {nurse.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Other */}
-          <div>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="assistanceType"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Tipo di assistenza
-                </label>
-                <select
-                  id="assistanceType"
-                  name="assistanceType"
-                  value={formData.assistanceType}
-                  onChange={handleSelectChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                >
-                  <option value="">Seleziona...</option>
-                  <option value="ADI">
-                    ADI - Assistenza Domiciliare Integrata
-                  </option>
-                  <option value="ADP">
-                    ADP - Assistenza Domiciliare Programmata
-                  </option>
-                  <option value="CURE_PALLIATIVE">Cure Palliative</option>
-                  <option value="DIMISSIONE_PROTETTA">
-                    Dimissione Protetta
-                  </option>
-                  <option value="RIABILITAZIONE">Riabilitazione</option>
-                  <option value="PRESTAZIONI_INFERMIERISTICHE">
-                    Prestazioni Infermieristiche
-                  </option>
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="exemptionCode"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Esenzione *
-                </label>
-                <input
-                  id="exemptionCode"
-                  name="exemptionCode"
-                  type="text"
-                  required
-                  value={formData.exemptionCode}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={updatePatient.isPending}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div>
             <textarea
               id="notes"
               name="notes"
               rows={4}
               value={formData.notes}
               onChange={handleChange}
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              placeholder="Note aggiuntive sulla visita..."
+              placeholder="Note generali sul paziente..."
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               disabled={updatePatient.isPending}
             />
           </div>
 
-          {/* Actions */}
+          {/* Scheduled Visits */}
+          <div>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">
+                Prestazioni Pianificate
+              </h2>
+              <button
+                type="button"
+                onClick={handleAddVisit}
+                className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700"
+                disabled={updatePatient.isPending}
+              >
+                + Aggiungi
+              </button>
+            </div>
+            {scheduledVisits.map((visit, index) => (
+              <div key={index} className="mb-4 rounded-lg border bg-white p-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">
+                      Tipo Assistenza *
+                    </label>
+                    <select
+                      value={visit.assistanceType}
+                      onChange={(e) =>
+                        handleVisitChange(
+                          index,
+                          "assistanceType",
+                          e.target.value,
+                        )
+                      }
+                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                    >
+                      <option value="">Seleziona...</option>
+                      <option value="ADI">ADI</option>
+                      <option value="ADP">ADP</option>
+                      <option value="CURE_PALLIATIVE">Cure Palliative</option>
+                      <option value="DIMISSIONE_PROTETTA">
+                        Dimissione Protetta
+                      </option>
+                      <option value="RIABILITAZIONE">Riabilitazione</option>
+                      <option value="PRESTAZIONI_INFERMIERISTICHE">
+                        Prestazioni Infermieristiche
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">
+                      Data Prossima Visita *
+                    </label>
+                    <input
+                      type="date"
+                      value={visit.nextVisitDate}
+                      onChange={(e) =>
+                        handleVisitChange(
+                          index,
+                          "nextVisitDate",
+                          e.target.value,
+                        )
+                      }
+                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">
+                      Cadenza (giorni)
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="Es: 7 per settimanale"
+                      value={visit.visitFrequency}
+                      onChange={(e) =>
+                        handleVisitChange(
+                          index,
+                          "visitFrequency",
+                          e.target.value,
+                        )
+                      }
+                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">
+                      Infermiere Assegnato
+                    </label>
+                    <select
+                      value={visit.assignedToId}
+                      onChange={(e) =>
+                        handleVisitChange(index, "assignedToId", e.target.value)
+                      }
+                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                    >
+                      <option value="">Seleziona infermiere...</option>
+                      {nursesQuery.data?.map((nurse) => (
+                        <option key={nurse.id} value={nurse.id}>
+                          {nurse.name || nurse.username}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="mb-1 block text-sm font-medium text-gray-700">
+                      Note Prestazione
+                    </label>
+                    <textarea
+                      placeholder="Note specifiche per questa prestazione..."
+                      value={visit.notes}
+                      onChange={(e) =>
+                        handleVisitChange(index, "notes", e.target.value)
+                      }
+                      rows={2}
+                      className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveVisit(index)}
+                  className="mt-3 text-sm font-medium text-red-600 hover:text-red-700"
+                >
+                  🗑️ Rimuovi prestazione
+                </button>
+              </div>
+            ))}
+            {scheduledVisits.length === 0 && (
+              <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center">
+                <p className="text-gray-500">
+                  Nessuna prestazione pianificata. Clicca &quot;+ Aggiungi&quot;
+                  per aggiungerne una.
+                </p>
+              </div>
+            )}
+          </div>
+
           <div className="flex justify-end gap-4">
             <Link
               href="/dashboard"
-              className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50"
             >
               Annulla
             </Link>
             <button
               type="submit"
               disabled={updatePatient.isPending}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:opacity-50"
             >
               {updatePatient.isPending ? "Salvataggio..." : "Salva Modifiche"}
             </button>

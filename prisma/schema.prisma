@@ -15,18 +15,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
@@ -67,14 +55,14 @@ model User {
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
 
-    accounts                 Account[]
-    sessions                 Session[]
-    posts                    Post[]
-    createdPatients          Patient[]     @relation("CreatedPatients")
-    assignedPatients         Patient[]     @relation("AssignedPatients")
-    lastAssignedPatients     Patient[]     @relation("LastAssignedPatients")
-    createdAppointments      Appointment[] @relation("CreatedAppointments")
-    lastModifiedAppointments Appointment[] @relation("LastModifiedAppointments")
+    accounts                Account[]
+    sessions                Session[]
+    createdPatients         Patient[]        @relation("CreatedPatients")
+    assignedPatients        Patient[]        @relation("AssignedPatients")
+    lastAssignedPatients    Patient[]        @relation("LastAssignedPatients")
+    createdScheduledVisits  ScheduledVisit[] @relation("CreatedScheduledVisits")
+    assignedScheduledVisits ScheduledVisit[] @relation("AssignedScheduledVisits")
+    performedVisits         CompletedVisit[] @relation("PerformedVisits")
 }
 
 enum AssistanceType {
@@ -87,24 +75,21 @@ enum AssistanceType {
 }
 
 model Patient {
-    id             String          @id @default(cuid())
-    firstName      String
-    lastName       String
-    dateOfBirth    DateTime?
-    fiscalCode     String?         @unique // Codice Fiscale
-    address        String?
-    houseNumber    String? // Numero civico
-    city           String?
-    postalCode     String?
-    phone1         String // Telefono principale (obbligatorio)
-    phone2         String? // Telefono secondario
-    assistanceType AssistanceType? // Tipo di assistenza
-    exemptionCode  String // Codice esenzione
-    nextVisitDate  DateTime? // Data prossima visita / Data inizio per pattern settimanale
-    weeklyPattern  String? // Giorni settimana: "1,2,3" = Lun,Mar,Mer (0=Dom disabilitato, 1-6=Lun-Sab)
-    notes          String?
-    createdAt      DateTime        @default(now())
-    updatedAt      DateTime        @updatedAt
+    id            String    @id @default(cuid())
+    firstName     String
+    lastName      String
+    dateOfBirth   DateTime?
+    fiscalCode    String?   @unique // Codice Fiscale
+    address       String?
+    houseNumber   String? // Numero civico
+    city          String?
+    postalCode    String?
+    phone1        String // Telefono principale (obbligatorio)
+    phone2        String? // Telefono secondario
+    exemptionCode String // Codice esenzione
+    notes         String?
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
 
     createdBy        User      @relation("CreatedPatients", fields: [createdById], references: [id])
     createdById      String
@@ -114,35 +99,63 @@ model Patient {
     lastAssignedById String?
     lastAssignedAt   DateTime?
 
-    appointments Appointment[]
+    scheduledVisits ScheduledVisit[] // Lista delle prestazioni pianificate
 
     @@index([lastName, firstName])
     @@index([fiscalCode])
     @@index([phone1])
-    @@index([nextVisitDate])
 }
 
-model Appointment {
+// Prestazione pianificata per un paziente
+model ScheduledVisit {
     id        String  @id @default(cuid())
     patientId String
     patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
-    scheduledDate DateTime
-    duration      Int      @default(60) // duration in minutes
-    status        String   @default("scheduled") // scheduled, completed, cancelled
-    notes         String?
+    assistanceType AssistanceType // Tipo di prestazione/assistenza
+    nextVisitDate  DateTime // Prossima data di visita per questa prestazione
+    visitFrequency Int? // Cadenza in giorni (null = visita singola non ricorrente)
+    notes          String? // Note specifiche per questa prestazione
+    isActive       Boolean        @default(true) // Se false, la prestazione è stata sospesa
+
+    // Infermiere assegnato a questa specifica prestazione
+    assignedTo   User?   @relation("AssignedScheduledVisits", fields: [assignedToId], references: [id])
+    assignedToId String?
 
     createdAt   DateTime @default(now())
-    createdBy   User     @relation("CreatedAppointments", fields: [createdById], references: [id])
+    createdBy   User     @relation("CreatedScheduledVisits", fields: [createdById], references: [id])
     createdById String
 
-    lastModifiedAt   DateTime @updatedAt
-    lastModifiedBy   User     @relation("LastModifiedAppointments", fields: [lastModifiedById], references: [id])
-    lastModifiedById String
+    updatedAt DateTime @updatedAt
+
+    completedVisits CompletedVisit[] // Storico delle visite completate
 
     @@index([patientId])
-    @@index([scheduledDate])
-    @@index([createdById])
+    @@index([nextVisitDate])
+    @@index([assistanceType])
+    @@index([assignedToId])
+}
+
+// Storico delle prestazioni completate
+model CompletedVisit {
+    id               String         @id @default(cuid())
+    scheduledVisitId String
+    scheduledVisit   ScheduledVisit @relation(fields: [scheduledVisitId], references: [id], onDelete: Cascade)
+    patientId        String // Denormalizzato per query più veloci
+
+    completedDate  DateTime // Data in cui è stata effettuata la prestazione
+    assistanceType AssistanceType // Denormalizzato
+    notes          String? // Note specifiche di questa visita completata
+
+    performedBy   User   @relation("PerformedVisits", fields: [performedById], references: [id])
+    performedById String // Infermiere che ha effettuato la prestazione
+
+    createdAt DateTime @default(now())
+
+    @@index([patientId])
+    @@index([completedDate])
+    @@index([performedById])
+    @@index([scheduledVisitId])
 }
 
 model VerificationToken {

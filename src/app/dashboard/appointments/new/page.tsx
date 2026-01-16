@@ -22,7 +22,7 @@ export default function NewAppointmentPage() {
 
   const { data: searchResults } = api.patient.search.useQuery(
     { query: searchQuery },
-    { enabled: searchQuery.length > 2 }
+    { enabled: searchQuery.length > 2 },
   );
 
   const createAppointment = api.appointment.create.useMutation({
@@ -41,7 +41,7 @@ export default function NewAppointmentPage() {
     }
 
     const dateTime = new Date(
-      `${formData.scheduledDate}T${formData.scheduledTime}`
+      `${formData.scheduledDate}T${formData.scheduledTime}`,
     );
 
     createAppointment.mutate({
@@ -53,7 +53,9 @@ export default function NewAppointmentPage() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -102,7 +104,7 @@ export default function NewAppointmentPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Cerca paziente per nome o codice fiscale..."
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 />
                 {searchResults && searchResults.length > 0 && (
                   <div className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-gray-200">
@@ -169,7 +171,7 @@ export default function NewAppointmentPage() {
                 value={formData.scheduledDate}
                 onChange={handleChange}
                 min={new Date().toISOString().split("T")[0]}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 disabled={createAppointment.isPending}
               />
             </div>
@@ -188,7 +190,7 @@ export default function NewAppointmentPage() {
                 required
                 value={formData.scheduledTime}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 disabled={createAppointment.isPending}
               />
             </div>
@@ -207,7 +209,7 @@ export default function NewAppointmentPage() {
               name="duration"
               value={formData.duration}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               disabled={createAppointment.isPending}
             >
               <option value="15">15 minuti</option>
@@ -233,7 +235,7 @@ export default function NewAppointmentPage() {
               rows={4}
               value={formData.notes}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               placeholder="Note sull'appuntamento..."
               disabled={createAppointment.isPending}
             />
