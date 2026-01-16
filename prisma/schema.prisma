@@ -100,8 +100,8 @@ model Patient {
     phone2         String? // Telefono secondario
     assistanceType AssistanceType? // Tipo di assistenza
     exemptionCode  String // Codice esenzione
-    nextVisitDate  DateTime? // Data prossima visita
-    visitFrequency Int? // Cadenza visite in giorni
+    nextVisitDate  DateTime? // Data prossima visita / Data inizio per pattern settimanale
+    weeklyPattern  String? // Giorni settimana: "1,2,3" = Lun,Mar,Mer (0=Dom disabilitato, 1-6=Lun-Sab)
     notes          String?
     createdAt      DateTime        @default(now())
     updatedAt      DateTime        @updatedAt

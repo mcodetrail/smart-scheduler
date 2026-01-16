@@ -25,7 +25,7 @@ export default function NewPatientPage() {
     assistanceType: string;
     exemptionCode: string;
     nextVisitDate: string;
-    visitFrequency: string;
+    weeklyPattern: string[];
     assignedToId: string;
     notes: string;
   }>({
@@ -42,7 +42,7 @@ export default function NewPatientPage() {
     assistanceType: "",
     exemptionCode: "",
     nextVisitDate: "",
-    visitFrequency: "",
+    weeklyPattern: [],
     assignedToId: session?.user?.id || "",
     notes: "",
   });
@@ -101,9 +101,10 @@ export default function NewPatientPage() {
       nextVisitDate: formData.nextVisitDate
         ? new Date(formData.nextVisitDate)
         : undefined,
-      visitFrequency: formData.visitFrequency
-        ? parseInt(formData.visitFrequency)
-        : undefined,
+      weeklyPattern:
+        formData.weeklyPattern.length > 0
+          ? formData.weeklyPattern.join(",")
+          : undefined,
       assignedToId: formData.assignedToId || undefined,
       notes: formData.notes.trim() || undefined,
     });
@@ -122,6 +123,15 @@ export default function NewPatientPage() {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleWeeklyPatternChange = (day: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      weeklyPattern: prev.weeklyPattern.includes(day)
+        ? prev.weeklyPattern.filter((d) => d !== day)
+        : [...prev.weeklyPattern, day].sort(),
     }));
   };
 
@@ -372,25 +382,60 @@ export default function NewPatientPage() {
                   disabled={createPatient.isPending}
                 />
               </div>
+            </div>
 
-              <div>
+            {/* Weekly Pattern */}
+            <div className="mt-6">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Giorni della Settimana (Opzionale)
+              </label>
+              <p className="mb-3 text-xs text-gray-500">
+                Seleziona i giorni specifici della settimana per visite
+                ricorrenti. Alternativa alla cadenza in giorni.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  { value: "1", label: "Lun", fullLabel: "Lunedì" },
+                  { value: "2", label: "Mar", fullLabel: "Martedì" },
+                  { value: "3", label: "Mer", fullLabel: "Mercoledì" },
+                  { value: "4", label: "Gio", fullLabel: "Giovedì" },
+                  { value: "5", label: "Ven", fullLabel: "Venerdì" },
+                  { value: "6", label: "Sab", fullLabel: "Sabato" },
+                ].map((day) => (
+                  <label
+                    key={day.value}
+                    className={`flex cursor-pointer items-center space-x-2 rounded-lg border px-4 py-2 ${
+                      formData.weeklyPattern.includes(day.value)
+                        ? "border-indigo-500 bg-indigo-50"
+                        : "border-gray-300 bg-white hover:border-indigo-300"
+                    }`}
+                    title={day.fullLabel}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.weeklyPattern.includes(day.value)}
+                      onChange={() => handleWeeklyPatternChange(day.value)}
+                      disabled={createPatient.isPending}
+                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      {day.label}
+                    </span>
+                  </label>
+                ))}
+                {/* Domenica disabilitata */}
                 <label
-                  htmlFor="visitFrequency"
-                  className="block text-sm font-medium text-gray-700"
+                  className="flex cursor-not-allowed items-center space-x-2 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 opacity-50"
+                  title="Domenica non disponibile"
                 >
-                  Cadenza (giorni)
+                  <input
+                    type="checkbox"
+                    checked={false}
+                    disabled={true}
+                    className="h-4 w-4 rounded border-gray-300"
+                  />
+                  <span className="text-sm font-medium text-gray-500">Dom</span>
                 </label>
-                <input
-                  id="visitFrequency"
-                  name="visitFrequency"
-                  type="number"
-                  min="1"
-                  value={formData.visitFrequency}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                  disabled={createPatient.isPending}
-                  placeholder="Es: 7 per visite settimanali"
-                />
               </div>
             </div>
           </div>

@@ -22,7 +22,7 @@ export const patientRouter = createTRPCRouter({
         assistanceType: z.nativeEnum(AssistanceType).optional(),
         exemptionCode: z.string().max(10),
         nextVisitDate: z.date().optional(),
-        visitFrequency: z.number().int().positive().optional(),
+        weeklyPattern: z.string().optional(),
         assignedToId: z.string().optional(),
         notes: z.string().optional(),
       })
@@ -72,7 +72,7 @@ export const patientRouter = createTRPCRouter({
         assistanceType: z.nativeEnum(AssistanceType).optional(),
         exemptionCode: z.string().max(10),
         nextVisitDate: z.date().optional(),
-        visitFrequency: z.number().int().positive().optional(),
+        weeklyPattern: z.string().optional(),
         assignedToId: z.string().optional(),
         notes: z.string().optional(),
       })
@@ -234,7 +234,7 @@ export const patientRouter = createTRPCRouter({
     }),
 
   /**
-   * Search patients by name or fiscal code
+   * Search patients by name, fiscal code, or phone
    */
   search: protectedProcedure
     .input(z.object({ query: z.string().min(1) }))
@@ -245,9 +245,11 @@ export const patientRouter = createTRPCRouter({
             { firstName: { contains: input.query } },
             { lastName: { contains: input.query } },
             { fiscalCode: { contains: input.query } },
+            { phone1: { contains: input.query } },
+            { phone2: { contains: input.query } },
           ],
         },
-        take: 10,
+        take: 20,
         orderBy: [{ lastName: "asc" }, { firstName: "asc" }],
         select: {
           id: true,
@@ -256,6 +258,16 @@ export const patientRouter = createTRPCRouter({
           fiscalCode: true,
           dateOfBirth: true,
           phone1: true,
+          phone2: true,
+          address: true,
+          city: true,
+          nextVisitDate: true,
+          assignedTo: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       });
 
@@ -289,7 +301,7 @@ export const patientRouter = createTRPCRouter({
           phone1: true,
           notes: true,
           nextVisitDate: true,
-          visitFrequency: true,
+          weeklyPattern: true,
           assignedTo: {
             select: {
               id: true,

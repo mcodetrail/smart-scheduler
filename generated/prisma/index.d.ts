@@ -6218,18 +6218,8 @@ export namespace Prisma {
 
   export type AggregatePatient = {
     _count: PatientCountAggregateOutputType | null
-    _avg: PatientAvgAggregateOutputType | null
-    _sum: PatientSumAggregateOutputType | null
     _min: PatientMinAggregateOutputType | null
     _max: PatientMaxAggregateOutputType | null
-  }
-
-  export type PatientAvgAggregateOutputType = {
-    visitFrequency: number | null
-  }
-
-  export type PatientSumAggregateOutputType = {
-    visitFrequency: number | null
   }
 
   export type PatientMinAggregateOutputType = {
@@ -6247,7 +6237,7 @@ export namespace Prisma {
     assistanceType: $Enums.AssistanceType | null
     exemptionCode: string | null
     nextVisitDate: Date | null
-    visitFrequency: number | null
+    weeklyPattern: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -6272,7 +6262,7 @@ export namespace Prisma {
     assistanceType: $Enums.AssistanceType | null
     exemptionCode: string | null
     nextVisitDate: Date | null
-    visitFrequency: number | null
+    weeklyPattern: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -6297,7 +6287,7 @@ export namespace Prisma {
     assistanceType: number
     exemptionCode: number
     nextVisitDate: number
-    visitFrequency: number
+    weeklyPattern: number
     notes: number
     createdAt: number
     updatedAt: number
@@ -6308,14 +6298,6 @@ export namespace Prisma {
     _all: number
   }
 
-
-  export type PatientAvgAggregateInputType = {
-    visitFrequency?: true
-  }
-
-  export type PatientSumAggregateInputType = {
-    visitFrequency?: true
-  }
 
   export type PatientMinAggregateInputType = {
     id?: true
@@ -6332,7 +6314,7 @@ export namespace Prisma {
     assistanceType?: true
     exemptionCode?: true
     nextVisitDate?: true
-    visitFrequency?: true
+    weeklyPattern?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -6357,7 +6339,7 @@ export namespace Prisma {
     assistanceType?: true
     exemptionCode?: true
     nextVisitDate?: true
-    visitFrequency?: true
+    weeklyPattern?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -6382,7 +6364,7 @@ export namespace Prisma {
     assistanceType?: true
     exemptionCode?: true
     nextVisitDate?: true
-    visitFrequency?: true
+    weeklyPattern?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -6431,18 +6413,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: PatientAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PatientSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: PatientMinAggregateInputType
@@ -6473,8 +6443,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PatientCountAggregateInputType | true
-    _avg?: PatientAvgAggregateInputType
-    _sum?: PatientSumAggregateInputType
     _min?: PatientMinAggregateInputType
     _max?: PatientMaxAggregateInputType
   }
@@ -6494,7 +6462,7 @@ export namespace Prisma {
     assistanceType: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate: Date | null
-    visitFrequency: number | null
+    weeklyPattern: string | null
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -6503,8 +6471,6 @@ export namespace Prisma {
     lastAssignedById: string | null
     lastAssignedAt: Date | null
     _count: PatientCountAggregateOutputType | null
-    _avg: PatientAvgAggregateOutputType | null
-    _sum: PatientSumAggregateOutputType | null
     _min: PatientMinAggregateOutputType | null
     _max: PatientMaxAggregateOutputType | null
   }
@@ -6538,7 +6504,7 @@ export namespace Prisma {
     assistanceType?: boolean
     exemptionCode?: boolean
     nextVisitDate?: boolean
-    visitFrequency?: boolean
+    weeklyPattern?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6568,7 +6534,7 @@ export namespace Prisma {
     assistanceType?: boolean
     exemptionCode?: boolean
     nextVisitDate?: boolean
-    visitFrequency?: boolean
+    weeklyPattern?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6596,7 +6562,7 @@ export namespace Prisma {
     assistanceType?: boolean
     exemptionCode?: boolean
     nextVisitDate?: boolean
-    visitFrequency?: boolean
+    weeklyPattern?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6624,7 +6590,7 @@ export namespace Prisma {
     assistanceType?: boolean
     exemptionCode?: boolean
     nextVisitDate?: boolean
-    visitFrequency?: boolean
+    weeklyPattern?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -6634,7 +6600,7 @@ export namespace Prisma {
     lastAssignedAt?: boolean
   }
 
-  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "fiscalCode" | "address" | "houseNumber" | "city" | "postalCode" | "phone1" | "phone2" | "assistanceType" | "exemptionCode" | "nextVisitDate" | "visitFrequency" | "notes" | "createdAt" | "updatedAt" | "createdById" | "assignedToId" | "lastAssignedById" | "lastAssignedAt", ExtArgs["result"]["patient"]>
+  export type PatientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "dateOfBirth" | "fiscalCode" | "address" | "houseNumber" | "city" | "postalCode" | "phone1" | "phone2" | "assistanceType" | "exemptionCode" | "nextVisitDate" | "weeklyPattern" | "notes" | "createdAt" | "updatedAt" | "createdById" | "assignedToId" | "lastAssignedById" | "lastAssignedAt", ExtArgs["result"]["patient"]>
   export type PatientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | Patient$assignedToArgs<ExtArgs>
@@ -6676,7 +6642,7 @@ export namespace Prisma {
       assistanceType: $Enums.AssistanceType | null
       exemptionCode: string
       nextVisitDate: Date | null
-      visitFrequency: number | null
+      weeklyPattern: string | null
       notes: string | null
       createdAt: Date
       updatedAt: Date
@@ -7125,7 +7091,7 @@ export namespace Prisma {
     readonly assistanceType: FieldRef<"Patient", 'AssistanceType'>
     readonly exemptionCode: FieldRef<"Patient", 'String'>
     readonly nextVisitDate: FieldRef<"Patient", 'DateTime'>
-    readonly visitFrequency: FieldRef<"Patient", 'Int'>
+    readonly weeklyPattern: FieldRef<"Patient", 'String'>
     readonly notes: FieldRef<"Patient", 'String'>
     readonly createdAt: FieldRef<"Patient", 'DateTime'>
     readonly updatedAt: FieldRef<"Patient", 'DateTime'>
@@ -9827,7 +9793,7 @@ export namespace Prisma {
     assistanceType: 'assistanceType',
     exemptionCode: 'exemptionCode',
     nextVisitDate: 'nextVisitDate',
-    visitFrequency: 'visitFrequency',
+    weeklyPattern: 'weeklyPattern',
     notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -10248,7 +10214,7 @@ export namespace Prisma {
     assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringFilter<"Patient"> | string
     nextVisitDate?: DateTimeNullableFilter<"Patient"> | Date | string | null
-    visitFrequency?: IntNullableFilter<"Patient"> | number | null
+    weeklyPattern?: StringNullableFilter<"Patient"> | string | null
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
@@ -10277,7 +10243,7 @@ export namespace Prisma {
     assistanceType?: SortOrderInput | SortOrder
     exemptionCode?: SortOrder
     nextVisitDate?: SortOrderInput | SortOrder
-    visitFrequency?: SortOrderInput | SortOrder
+    weeklyPattern?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10309,7 +10275,7 @@ export namespace Prisma {
     assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringFilter<"Patient"> | string
     nextVisitDate?: DateTimeNullableFilter<"Patient"> | Date | string | null
-    visitFrequency?: IntNullableFilter<"Patient"> | number | null
+    weeklyPattern?: StringNullableFilter<"Patient"> | string | null
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
@@ -10338,7 +10304,7 @@ export namespace Prisma {
     assistanceType?: SortOrderInput | SortOrder
     exemptionCode?: SortOrder
     nextVisitDate?: SortOrderInput | SortOrder
-    visitFrequency?: SortOrderInput | SortOrder
+    weeklyPattern?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10347,10 +10313,8 @@ export namespace Prisma {
     lastAssignedById?: SortOrderInput | SortOrder
     lastAssignedAt?: SortOrderInput | SortOrder
     _count?: PatientCountOrderByAggregateInput
-    _avg?: PatientAvgOrderByAggregateInput
     _max?: PatientMaxOrderByAggregateInput
     _min?: PatientMinOrderByAggregateInput
-    _sum?: PatientSumOrderByAggregateInput
   }
 
   export type PatientScalarWhereWithAggregatesInput = {
@@ -10371,7 +10335,7 @@ export namespace Prisma {
     assistanceType?: EnumAssistanceTypeNullableWithAggregatesFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringWithAggregatesFilter<"Patient"> | string
     nextVisitDate?: DateTimeNullableWithAggregatesFilter<"Patient"> | Date | string | null
-    visitFrequency?: IntNullableWithAggregatesFilter<"Patient"> | number | null
+    weeklyPattern?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     notes?: StringNullableWithAggregatesFilter<"Patient"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Patient"> | Date | string
@@ -10861,7 +10825,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10887,7 +10851,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10913,7 +10877,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10939,7 +10903,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10965,7 +10929,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10990,7 +10954,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11012,7 +10976,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11560,7 +11524,7 @@ export namespace Prisma {
     assistanceType?: SortOrder
     exemptionCode?: SortOrder
     nextVisitDate?: SortOrder
-    visitFrequency?: SortOrder
+    weeklyPattern?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11568,10 +11532,6 @@ export namespace Prisma {
     assignedToId?: SortOrder
     lastAssignedById?: SortOrder
     lastAssignedAt?: SortOrder
-  }
-
-  export type PatientAvgOrderByAggregateInput = {
-    visitFrequency?: SortOrder
   }
 
   export type PatientMaxOrderByAggregateInput = {
@@ -11589,7 +11549,7 @@ export namespace Prisma {
     assistanceType?: SortOrder
     exemptionCode?: SortOrder
     nextVisitDate?: SortOrder
-    visitFrequency?: SortOrder
+    weeklyPattern?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11614,7 +11574,7 @@ export namespace Prisma {
     assistanceType?: SortOrder
     exemptionCode?: SortOrder
     nextVisitDate?: SortOrder
-    visitFrequency?: SortOrder
+    weeklyPattern?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11622,10 +11582,6 @@ export namespace Prisma {
     assignedToId?: SortOrder
     lastAssignedById?: SortOrder
     lastAssignedAt?: SortOrder
-  }
-
-  export type PatientSumOrderByAggregateInput = {
-    visitFrequency?: SortOrder
   }
 
   export type EnumAssistanceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12847,7 +12803,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12872,7 +12828,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12906,7 +12862,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12931,7 +12887,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12965,7 +12921,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12990,7 +12946,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13197,7 +13153,7 @@ export namespace Prisma {
     assistanceType?: EnumAssistanceTypeNullableFilter<"Patient"> | $Enums.AssistanceType | null
     exemptionCode?: StringFilter<"Patient"> | string
     nextVisitDate?: DateTimeNullableFilter<"Patient"> | Date | string | null
-    visitFrequency?: IntNullableFilter<"Patient"> | number | null
+    weeklyPattern?: StringNullableFilter<"Patient"> | string | null
     notes?: StringNullableFilter<"Patient"> | string | null
     createdAt?: DateTimeFilter<"Patient"> | Date | string
     updatedAt?: DateTimeFilter<"Patient"> | Date | string
@@ -13639,7 +13595,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13664,7 +13620,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13795,7 +13751,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13820,7 +13776,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13975,7 +13931,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13999,7 +13955,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14023,7 +13979,7 @@ export namespace Prisma {
     assistanceType?: $Enums.AssistanceType | null
     exemptionCode: string
     nextVisitDate?: Date | string | null
-    visitFrequency?: number | null
+    weeklyPattern?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14154,7 +14110,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14179,7 +14135,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14204,7 +14160,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14228,7 +14184,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14253,7 +14209,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14278,7 +14234,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14302,7 +14258,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14327,7 +14283,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14352,7 +14308,7 @@ export namespace Prisma {
     assistanceType?: NullableEnumAssistanceTypeFieldUpdateOperationsInput | $Enums.AssistanceType | null
     exemptionCode?: StringFieldUpdateOperationsInput | string
     nextVisitDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    visitFrequency?: NullableIntFieldUpdateOperationsInput | number | null
+    weeklyPattern?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

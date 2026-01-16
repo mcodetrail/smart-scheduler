@@ -177,7 +177,7 @@ exports.Prisma.PatientScalarFieldEnum = {
   assistanceType: 'assistanceType',
   exemptionCode: 'exemptionCode',
   nextVisitDate: 'nextVisitDate',
-  visitFrequency: 'visitFrequency',
+  weeklyPattern: 'weeklyPattern',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
