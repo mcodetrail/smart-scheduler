@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import type { AssistanceType } from "generated/prisma";
+import { ASSISTANCE_TYPE_LABELS, ASSISTANCE_TYPES } from "@/lib/constants";
 
 type ScheduledVisitInput = {
   id?: string;
@@ -260,7 +261,7 @@ export default function EditPatientPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-gradient-to-r from-indigo-600 to-indigo-700 shadow-lg">
+      <header className="border-b bg-linear-to-r from-indigo-600 to-indigo-700 shadow-lg">
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>
@@ -654,18 +655,11 @@ export default function EditPatientPage({
                           className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
                         >
                           <option value="">Seleziona...</option>
-                          <option value="ADI">ADI</option>
-                          <option value="ADP">ADP</option>
-                          <option value="CURE_PALLIATIVE">
-                            Cure Palliative
-                          </option>
-                          <option value="DIMISSIONE_PROTETTA">
-                            Dimissione Protetta
-                          </option>
-                          <option value="RIABILITAZIONE">Riabilitazione</option>
-                          <option value="PRESTAZIONI_INFERMIERISTICHE">
-                            Prestazioni Infermieristiche
-                          </option>
+                          {ASSISTANCE_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                              {ASSISTANCE_TYPE_LABELS[type]}
+                            </option>
+                          ))}
                         </select>
                       </div>
                       <div>

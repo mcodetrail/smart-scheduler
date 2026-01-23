@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import type { ScheduledVisitWithRelations } from "@/types/visit";
+import { ASSISTANCE_TYPE_LABELS } from "@/lib/constants";
 
 type Tab = "today" | "tomorrow" | "week" | "date" | "search";
 
@@ -12,7 +14,6 @@ export default function DashboardPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<Tab>("today");
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchDate, setSearchDate] = useState("");
   const [searchDateStart, setSearchDateStart] = useState("");
   const [searchDateEnd, setSearchDateEnd] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -113,11 +114,11 @@ export default function DashboardPage() {
 
   // Group scheduled visits by date
   const groupVisitsByDate = (
-    visits: any[] | undefined,
-  ): Record<string, any[]> => {
+    visits: ScheduledVisitWithRelations[] | undefined,
+  ): Record<string, ScheduledVisitWithRelations[]> => {
     if (!visits) return {};
 
-    const groups: Record<string, any[]> = {};
+    const groups: Record<string, ScheduledVisitWithRelations[]> = {};
 
     visits.forEach((visit) => {
       const dateKey = formatDateKey(visit.nextVisitDate);
@@ -147,7 +148,7 @@ export default function DashboardPage() {
   const visitsByDate = getGroupedVisits();
 
   // Render visit card component
-  const renderVisitCard = (visit: any) => (
+  const renderVisitCard = (visit: ScheduledVisitWithRelations) => (
     <div key={visit.id} className="p-6 transition-colors">
       <div className="flex items-start justify-between gap-4">
         <div
@@ -159,7 +160,11 @@ export default function DashboardPage() {
               {visit.patient.lastName} {visit.patient.firstName}
             </h4>
             <span className="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-sm font-medium text-indigo-800">
-              {visit.assistanceType}
+              {Object.keys(ASSISTANCE_TYPE_LABELS).find(
+                (key) => key === visit.assistanceType,
+              )
+                ? ASSISTANCE_TYPE_LABELS[visit.assistanceType]
+                : visit.assistanceType}
             </span>
             <span className="inline-flex items-center rounded-full bg-gray-100 px-3 py-0.5 text-sm text-gray-700">
               {visit.patient.assignedTo?.name || "Non assegnato"}
@@ -277,8 +282,8 @@ export default function DashboardPage() {
   // Render grouped by date view
   const renderGroupedByDateView = (
     isLoading: boolean,
-    error: any,
-    data: any[] | undefined,
+    error: unknown,
+    data: ScheduledVisitWithRelations[] | undefined,
     emptyMessage: string,
   ) => {
     if (isLoading) {
@@ -465,7 +470,6 @@ export default function DashboardPage() {
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    setSearchDate("");
                   }}
                   placeholder="Nome, Cognome, Codice Fiscale o Telefono"
                   className="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
@@ -537,9 +541,9 @@ export default function DashboardPage() {
           /* Grouped by date view for date search */
           <div className="space-y-6">
             {renderGroupedByDateView(
-              currentData.isLoading,
-              currentData.error,
-              currentData.data,
+              dateSearchVisits.isLoading,
+              dateSearchVisits.error,
+              dateSearchVisits.data,
               searchDateStart
                 ? "Nessuna visita programmata per questo periodo"
                 : "Seleziona un periodo per vedere le visite programmate",
@@ -548,11 +552,11 @@ export default function DashboardPage() {
         ) : activeTab === "search" ? (
           /* Patient search results */
           <div className="overflow-hidden rounded-lg bg-white shadow">
-            {currentData.isLoading ? (
+            {searchPatients.isLoading ? (
               <div className="p-8 text-center">
                 <div className="text-gray-500">Caricamento...</div>
               </div>
-            ) : !currentData.data || currentData.data.length === 0 ? (
+            ) : !searchPatients.data || searchPatients.data.length === 0 ? (
               <div className="p-8 text-center">
                 <div className="text-gray-500">
                   {debouncedQuery
@@ -562,7 +566,7 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="divide-y divide-gray-200">
-                {currentData.data.map((patient: any) => (
+                {searchPatients.data.map((patient) => (
                   <div
                     key={patient.id}
                     onClick={() => handleRowClick(patient.id)}
@@ -609,7 +613,9 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="divide-y divide-gray-200">
-                {currentData.data.map(renderVisitCard)}
+                {(currentData.data as ScheduledVisitWithRelations[]).map(
+                  renderVisitCard,
+                )}
               </div>
             )}
           </div>

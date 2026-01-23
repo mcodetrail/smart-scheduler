@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import type { AssistanceType } from "generated/prisma";
+import { ASSISTANCE_TYPES, ASSISTANCE_TYPE_LABELS } from "@/lib/constants";
 
 type ScheduledVisitInput = {
   assistanceType: AssistanceType | "";
@@ -505,10 +506,12 @@ export default function NewPatientPage() {
                       }
                       className="mb-2 block w-full rounded border p-2"
                     >
-                      <option value="">Tipo assistenza...</option>
-                      <option value="ADI">ADI</option>
-                      <option value="ADP">ADP</option>
-                      <option value="CURE_PALLIATIVE">Cure Palliative</option>
+                      <option value="">Seleziona...</option>
+                      {ASSISTANCE_TYPES.map((type) => (
+                        <option key={type} value={type}>
+                          {ASSISTANCE_TYPE_LABELS[type]}
+                        </option>
+                      ))}
                     </select>
                     <input
                       type="date"

@@ -11,7 +11,6 @@ export default function PatientHistoryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const router = useRouter();
   const patientQuery = api.patient.getById.useQuery({ id });
   const completedVisitsQuery =
     api.scheduledVisit.getCompletedByPatient.useQuery({
