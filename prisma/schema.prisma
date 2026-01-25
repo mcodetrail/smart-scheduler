@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
     output   = "../generated/prisma"
@@ -8,14 +5,8 @@ generator client {
 
 datasource db {
     provider = "sqlite"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
 }
 
-// Necessary for Next auth
 model Account {
     id                       String  @id @default(uuid())
     userId                   String
@@ -46,7 +37,7 @@ model Session {
 model User {
     id            String    @id @default(uuid())
     username      String    @unique
-    password      String // bcrypt hashed password
+    password      String    
     name          String?
     email         String?   @unique
     emailVerified DateTime?
@@ -66,8 +57,8 @@ model User {
 }
 
 enum AssistanceType {
-    ADI // Assistenza Domiciliare Integrata
-    ADP // Assistenza Domiciliare Programmata
+    ADI
+    ADP
     CURE_PALLIATIVE
     DIMISSIONE_PROTETTA
     RIABILITAZIONE
@@ -79,14 +70,14 @@ model Patient {
     firstName     String
     lastName      String
     dateOfBirth   DateTime?
-    fiscalCode    String?   @unique // Codice Fiscale
+    fiscalCode    String?   @unique
     address       String?
-    houseNumber   String? // Numero civico
+    houseNumber   String? 
     city          String?
     postalCode    String?
-    phone1        String // Telefono principale (obbligatorio)
-    phone2        String? // Telefono secondario
-    exemptionCode String // Codice esenzione
+    phone1        String
+    phone2        String?
+    exemptionCode String
     notes         String?
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
@@ -99,26 +90,24 @@ model Patient {
     lastAssignedById String?
     lastAssignedAt   DateTime?
 
-    scheduledVisits ScheduledVisit[] // Lista delle prestazioni pianificate
+    scheduledVisits ScheduledVisit[]
 
     @@index([lastName, firstName])
     @@index([fiscalCode])
     @@index([phone1])
 }
 
-// Prestazione pianificata per un paziente
 model ScheduledVisit {
     id        String  @id @default(uuid())
     patientId String
     patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
-    assistanceType AssistanceType // Tipo di prestazione/assistenza
-    nextVisitDate  DateTime // Prossima data di visita per questa prestazione
-    visitFrequency Int? // Cadenza in giorni (null = visita singola non ricorrente)
-    notes          String? // Note specifiche per questa prestazione
-    isActive       Boolean        @default(true) // Se false, la prestazione è stata sospesa
+    assistanceType AssistanceType
+    nextVisitDate  DateTime
+    visitFrequency Int?
+    notes          String?
+    isActive       Boolean        @default(true)
 
-    // Infermiere assegnato a questa specifica prestazione
     assignedTo   User?   @relation("AssignedScheduledVisits", fields: [assignedToId], references: [id])
     assignedToId String?
 
@@ -128,7 +117,7 @@ model ScheduledVisit {
 
     updatedAt DateTime @updatedAt
 
-    completedVisits CompletedVisit[] // Storico delle visite completate
+    completedVisits CompletedVisit[]
 
     @@index([patientId])
     @@index([nextVisitDate])
@@ -136,19 +125,18 @@ model ScheduledVisit {
     @@index([assignedToId])
 }
 
-// Storico delle prestazioni completate
 model CompletedVisit {
     id               String         @id @default(uuid())
     scheduledVisitId String
     scheduledVisit   ScheduledVisit @relation(fields: [scheduledVisitId], references: [id], onDelete: Cascade)
-    patientId        String // Denormalizzato per query più veloci
+    patientId        String
 
-    completedDate  DateTime // Data in cui è stata effettuata la prestazione
-    assistanceType AssistanceType // Denormalizzato
-    notes          String? // Note specifiche di questa visita completata
+    completedDate  DateTime
+    assistanceType AssistanceType
+    notes          String?
 
     performedBy   User   @relation("PerformedVisits", fields: [performedById], references: [id])
-    performedById String // Infermiere che ha effettuato la prestazione
+    performedById String
 
     createdAt DateTime @default(now())
 
