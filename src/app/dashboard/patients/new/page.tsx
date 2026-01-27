@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import type { AssistanceType } from "generated/prisma";
+import type { AssistanceType } from "@prisma/client";
 import { ASSISTANCE_TYPES, ASSISTANCE_TYPE_LABELS } from "@/lib/constants";
 
 type ScheduledVisitInput = {

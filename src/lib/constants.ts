@@ -1,4 +1,4 @@
-import type { AssistanceType } from "generated/prisma";
+import type { AssistanceType } from "@prisma/client";
 
 /**
  * Valori dell'enum AssistanceType da Prisma

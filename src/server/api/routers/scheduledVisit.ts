@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { AssistanceType } from "generated/prisma";
+import { AssistanceType } from "@prisma/client";
 
 export const scheduledVisitRouter = createTRPCRouter({
   // Get all scheduled visits for a patient

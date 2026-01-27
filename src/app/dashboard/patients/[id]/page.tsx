@@ -5,7 +5,7 @@ import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import type { AssistanceType } from "generated/prisma";
+import type { AssistanceType } from "@prisma/client";
 import { ASSISTANCE_TYPE_LABELS, ASSISTANCE_TYPES } from "@/lib/constants";
 
 type ScheduledVisitInput = {
@@ -127,7 +127,7 @@ export default function EditPatientPage({
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
