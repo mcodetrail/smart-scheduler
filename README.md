@@ -1,12 +1,8 @@
-# 🚀 Local-First Scheduling & Case Management System
+# 🚀 Smart Scheduler
 
-> **Enterprise-grade scheduling platform showcasing modern full-stack architecture with local-first data synchronization**
+> **Modern scheduling platform built with cutting-edge full-stack technologies**
 
-A comprehensive demonstration of cutting-edge technologies built for portfolio presentation, featuring advanced scheduling capabilities, real-time collaboration, and enterprise-level security patterns.
-
-## 🎯 **Why This Project Matters**
-
-While healthcare appointment scheduling serves as the domain example, the core innovation lies in the **local-first scheduling engine** and **real-time collaborative features** that can be applied to any industry requiring complex resource management.
+A comprehensive scheduling and case management system demonstrating modern development practices and architectural patterns. While healthcare appointment scheduling serves as the practical example, the core innovation lies in the **local-first scheduling engine** and **real-time collaborative features** that showcase advanced scheduling capabilities, real-time collaboration, and enterprise-level security patterns applicable to any industry requiring complex resource management.
 
 ## ⚡ **Key Technical Achievements**
 
@@ -25,11 +21,12 @@ While healthcare appointment scheduling serves as the domain example, the core i
 - **Optimistic UI updates** for instant user feedback
 
 ### 📊 **Data Management Innovation**
-- **Conflict-free scheduling** with intelligent double-booking prevention
-- **Audit logging** for compliance and tracking changes
-- **Advanced search capabilities** with fuzzy matching
-- **Data integrity constraints** ensuring consistency
-- **Automated database migrations** for seamless updates
+- **Visit scheduling system** with assistance type categorization
+- **Frequency-based scheduling** with automated next visit calculations
+- **Visit completion tracking** with comprehensive audit trails
+- **Advanced patient search** with fuzzy matching across multiple fields
+- **Data integrity constraints** ensuring referential consistency
+- **Automated database migrations** for seamless schema updates
 
 ## 🛠️ **Technology Stack**
 
@@ -37,7 +34,7 @@ While healthcare appointment scheduling serves as the domain example, the core i
 |----------|------------|---------|---------|
 | **Framework** | Next.js | 15.5+ | React-based full-stack framework with App Router |
 | **Language** | TypeScript | Latest | Type-safe development across frontend and backend |
-| **Database** | SQLite + Prisma | Latest | Local-first database with type-safe ORM |
+| **Database** | SQLite + Prisma | 7+ | Local-first database with type-safe ORM |
 | **Authentication** | NextAuth.js | v5 Beta | Enterprise-grade auth with session management |
 | **API Layer** | tRPC | 11.8+ | End-to-end typesafe APIs with React Query integration |
 | **UI Framework** | Tailwind CSS | 4.0 | Utility-first styling with PostCSS |
@@ -53,12 +50,12 @@ While healthcare appointment scheduling serves as the domain example, the core i
 - **Password strength enforcement** and breach detection ready
 - **OAuth integration ready** for enterprise SSO
 
-### 📅 **Intelligent Scheduling Engine**
-- **Real-time availability checking** preventing double bookings
-- **Dynamic time slot generation** with configurable intervals
-- **Multi-user collaboration** with conflict resolution
-- **Automated schedule optimization** suggestions
-- **Historical analytics** and trend reporting
+### 📅 **Visit Management System**
+- **Scheduled visit tracking** with assistance type classification
+- **Frequency-based recurring visits** with automatic scheduling
+- **Multi-provider assignment** with collaborative care coordination
+- **Visit completion workflow** from scheduled to completed status
+- **Historical visit analytics** and patient care tracking
 
 ### 👥 **Case Management System**
 - **Comprehensive data modeling** with relationship mapping
@@ -135,8 +132,8 @@ pnpm dev
 ┌─────────────────────────────────────────────────────┐
 │              Data Layer (Prisma + SQLite)          │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
-│  │    Users    │  │  Patients   │  │Appointments │ │
-│  │   Entity    │  │   Entity    │  │   Entity    │ │
+│  │    Users    │  │  Patients   │  │Scheduled    │ │
+│  │   Entity    │  │   Entity    │  │   Visits    │ │
 │  └─────────────┘  └─────────────┘  └─────────────┘ │
 └─────────────────────────────────────────────────────┘
 ```
@@ -197,18 +194,27 @@ medical-app/
 
 ### **Relational Data Model**
 ```sql
-┌─────────────┐     ┌──────────────┐     ┌─────────────────┐
-│    Users    │────▷│  Patients    │────▷│  Appointments   │
-│             │     │              │     │                 │
-│ id          │     │ id           │     │ id              │
-│ username    │     │ firstName    │     │ scheduledDate   │
-│ password    │     │ lastName     │     │ duration        │
-│ email       │     │ fiscalCode   │     │ status          │
-│ role        │     │ phone        │     │ createdBy       │
-│ createdAt   │     │ email        │     │ modifiedBy      │
-└─────────────┘     │ notes        │     │ lastModified    │
-                    │ createdBy    │     └─────────────────┘
-                    └──────────────┘
+┌─────────────┐     ┌──────────────┐     ┌──────────────────┐
+│    Users    │────▷│  Patients    │────▷│ ScheduledVisits  │
+│             │     │              │     │                  │
+│ id          │     │ id           │     │ id               │
+│ username    │     │ firstName    │     │ nextVisitDate    │
+│ password    │     │ lastName     │     │ assistanceType   │
+│ email       │     │ fiscalCode   │     │ visitFrequency   │
+│ role        │     │ phone1       │     │ assignedToId     │
+│ createdAt   │     │ address      │     │ createdById      │
+└─────────────┘     │ createdById  │     └──────────────────┘
+                    └──────────────┘              │
+                                                  ▽
+                                         ┌──────────────────┐
+                                         │ CompletedVisits  │
+                                         │                  │
+                                         │ id               │
+                                         │ completedDate    │
+                                         │ assistanceType   │
+                                         │ performedById    │
+                                         │ notes            │
+                                         └──────────────────┘
 ```
 
 ### **Advanced Database Features**
