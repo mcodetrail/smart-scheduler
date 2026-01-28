@@ -91,7 +91,7 @@ A comprehensive scheduling and case management system demonstrating modern devel
 ```bash
 # Clone and install dependencies
 git clone <repository-url>
-cd medical-app
+cd smart-scheduler
 pnpm install
 
 # Initialize database with sample data
@@ -149,7 +149,7 @@ pnpm dev
 ## 📁 **Project Structure**
 
 ```
-medical-app/
+smart-scheduler/
 ├── 🗄️  prisma/                    # Database layer
 │   ├── schema.prisma              # Type-safe database schema
 │   ├── seed.ts                    # Data initialization scripts  
