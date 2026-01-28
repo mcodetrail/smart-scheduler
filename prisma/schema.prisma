@@ -6,25 +6,6 @@ datasource db {
     provider = "sqlite"
 }
 
-model Account {
-    id                       String  @id @default(uuid())
-    userId                   String
-    type                     String
-    provider                 String
-    providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
-    expires_at               Int?
-    token_type               String?
-    scope                    String?
-    id_token                 String? // @db.Text
-    session_state            String?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    refresh_token_expires_in Int?
-
-    @@unique([provider, providerAccountId])
-}
-
 model Session {
     id           String   @id @default(uuid())
     sessionToken String   @unique
@@ -45,7 +26,6 @@ model User {
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
 
-    accounts                Account[]
     sessions                Session[]
     createdPatients         Patient[]        @relation("CreatedPatients")
     assignedPatients        Patient[]        @relation("AssignedPatients")
