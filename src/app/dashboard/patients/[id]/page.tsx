@@ -481,39 +481,6 @@ export default function EditPatientPage({
                       disabled={updatePatient.isPending}
                     />
                   </div>
-
-                  <div>
-                    <label
-                      htmlFor="assignedToId"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Infermiere Assegnato al Paziente
-                    </label>
-                    <select
-                      id="assignedToId"
-                      name="assignedToId"
-                      value={formData.assignedToId}
-                      onChange={handleChange}
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                      disabled={updatePatient.isPending}
-                    >
-                      <option value="">Nessun infermiere assegnato</option>
-                      {nursesQuery.data?.map((nurse) => (
-                        <option key={nurse.id} value={nurse.id}>
-                          {nurse.name || nurse.username}
-                        </option>
-                      ))}
-                    </select>
-                    {patientQuery.data?.lastAssignedBy && (
-                      <p className="mt-1 text-xs text-gray-500">
-                        Ultimo cambio da{" "}
-                        {patientQuery.data.lastAssignedBy.name ||
-                          patientQuery.data.lastAssignedBy.username}
-                        {patientQuery.data.lastAssignedAt &&
-                          ` il ${new Date(patientQuery.data.lastAssignedAt).toLocaleDateString("it-IT")}`}
-                      </p>
-                    )}
-                  </div>
                 </div>
               </div>
 
